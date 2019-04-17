@@ -1,13 +1,12 @@
-﻿namespace PAP.Business.DbContext
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using PAP.DataBase;
+
+namespace PAP.Business.DbContext
 {
-    using Microsoft.EntityFrameworkCore;
-    using PAP.DataBase;
-
-
-    public partial class Context : DbContext
+    public class ApplicationDatabaseContext : IdentityDbContext<Account, AccountRole, int>
     {
-        public Context(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+        public ApplicationDatabaseContext(DbContextOptions options) : base(options)
         {
         }
 
