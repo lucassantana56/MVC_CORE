@@ -5,6 +5,7 @@ using System;
 
 namespace PAP.Business.DbContext
 {
+
     public class ApplicationDatabaseContext : IdentityDbContext<Account, AccountRole, Guid>
     {
         public ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseContext> options) : base(options)
