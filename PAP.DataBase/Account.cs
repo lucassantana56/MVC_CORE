@@ -6,8 +6,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PAP.DataBase
 {
-    public class Account : IdentityUser<int>
+    public class Account : IdentityUser<Guid>
     {
+     
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AcountId { get; set; }
@@ -16,7 +17,6 @@ namespace PAP.DataBase
         public string NickName { get; set; }
         public DateTime BirthDay { get; set; }
         public string  PhotoUrl { get; set; }
-        public string PassWord { get; set; }
         public int Stars { get; set; }
         public string ProgrammingLanguages { get; set; }
         public string Country { get; set; }

@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
-
 namespace PAP.DataBase
 {
-    public class AccountRole : IdentityRole<Guid>
+    public class UserRole : IdentityUserRole<Guid>
     {
-
 
     }
 }
