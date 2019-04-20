@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PAP.DataBase
 {
-    public class Account : IdentityUser<Guid>
+    public class Account : IdentityUser
     {
      
         [Key]

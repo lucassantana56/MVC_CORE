@@ -6,7 +6,7 @@ using System;
 namespace PAP.Business.DbContext
 {
 
-    public class ApplicationDatabaseContext : IdentityDbContext<Account, AccountRole, Guid>
+    public class ApplicationDatabaseContext : IdentityDbContext<Account,AccountRole,Guid>
     {
         public ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseContext> options) : base(options)
         {
@@ -29,7 +29,7 @@ namespace PAP.Business.DbContext
         public virtual DbSet<VideoContentPublishAccount> VideoContentPublishAccount { get; set; }
         public virtual DbSet<VideoContentPublishEvent> VideoContentPublishEvent { get; set; }
         public virtual DbSet<AccountRole> AccountRole  { get; set; }
-        public virtual DbSet<UserRole> UserRole  { get; set; }
+       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
