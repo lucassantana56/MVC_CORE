@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PAP.DataBase;
 using System;
@@ -6,7 +7,7 @@ using System;
 namespace PAP.Business.DbContext
 {
 
-    public class ApplicationDatabaseContext : IdentityDbContext<Account,AccountRole,Guid>
+    public class ApplicationDatabaseContext : IdentityDbContext<Account,IdentityRole,string>
     {
         public ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseContext> options) : base(options)
         {

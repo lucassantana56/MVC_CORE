@@ -1,8 +1,9 @@
-﻿using PAP.DataBase;
+﻿using Microsoft.AspNetCore.Identity;
+using PAP.DataBase;
 
 namespace PAP.Business.AccountViewModels
 {
-    public class AccountRoleViewModel : UserRole
+    public class AccountRoleViewModel : IdentityRole
     {
     }
 }

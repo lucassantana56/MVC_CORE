@@ -1,8 +1,8 @@
 @using Microsoft.AspNetCore.Identity
-@using DevCommunity.Web.Models
+@using PAP.Business.AccountViewModels;
 
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<AccountViewModelBLL> SignInManager
+@inject UserManager<AccountViewModelBLL> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {

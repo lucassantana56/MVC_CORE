@@ -4,9 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using DevCommunity.Web.Models;
 using DevCommunity.Web.Services;
 using PAP.Business.DbContext;
+using PAP.Business.AccountViewModels;
+using System;
 
 namespace DevCommunity.Web
 {
@@ -28,7 +29,6 @@ namespace DevCommunity.Web
             services.AddIdentity<AccountViewModelBLL, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDatabaseContext>()
                 .AddDefaultTokenProviders();
-
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 

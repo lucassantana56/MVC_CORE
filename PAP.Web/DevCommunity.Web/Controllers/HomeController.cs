@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using DevCommunity.Web.Models;
+using PAP.Business.AccountViewModels;
 
 namespace DevCommunity.Web.Controllers
 {

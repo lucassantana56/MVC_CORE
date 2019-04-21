@@ -3,7 +3,6 @@ namespace PAP.DataBase
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("FeedBackContentEvent")]
     public partial class FeedBackContentEvent
     {
         [Key]

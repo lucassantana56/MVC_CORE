@@ -217,7 +217,8 @@ namespace DevCommunity.Web.Controllers
             if (ModelState.IsValid)
             {
                 var user = new AccountViewModelBLL { UserName = model.Email, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
+            //    var password = new AccountViewModelBLL { Password = model.Password };
+                var result = await _userManager.CreateAsync(user, "0420010_Lu");
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");

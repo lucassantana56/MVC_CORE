@@ -19,7 +19,10 @@ namespace PAP.DataBase
         public string  PhotoUrl { get; set; }
         public int Stars { get; set; }
         public string ProgrammingLanguages { get; set; }
-        public string Country { get; set; }
+        public string Country { get; set; }     
+     
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
 
         [InverseProperty(nameof(AccountOnEvent.Account))]
         public virtual ICollection<AccountOnEvent> AccountOnEvents { get; set; }
@@ -33,5 +36,7 @@ namespace PAP.DataBase
         public virtual  ICollection<FeedBackContentAccount> FeedBackContentAccounts { get; set; }
         [InverseProperty(nameof(FeedBackContentEvent.Account))]
         public virtual ICollection<FeedBackContentEvent> FeedBackContentEvents { get; set; }
+        [InverseProperty(nameof(AccountLogin.AccountId))]
+        public virtual  ICollection<AccountLogin> AccountLogins { get; set; }
     }
 }

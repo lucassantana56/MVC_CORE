@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 
@@ -84,14 +85,13 @@ namespace PAP.Business.DbContext.AccountMigrations
 
                     b.Property<string>("ProviderKey");
 
-                    b.Property<string>("ProviderDisplayName");
+                    b.Property<string>("ProviderDisplayName");                
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                   
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.HasIndex("UserId");
+            
 
                     b.ToTable("AspNetUserLogins");
                 });
