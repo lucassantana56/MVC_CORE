@@ -1,9 +1,8 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace PAP.DataBase
-{
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
-    public partial class PhotoContentPublishAccount
+{   
+    public class PhotoContentPublishAccount
     {
         [Key]
         public int PhotoContentPublishAccountId { get; set; }

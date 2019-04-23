@@ -1,18 +1,18 @@
+using PAP.DataBase.Auth;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace PAP.DataBase
 {
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
 
-    public partial class FeedBackContentAccount
+    public class FeedBackContentAccount
     {
         [Key]
         public int FeedBackContentAccountId { get; set; }
 
         public int ContentPublishAccountId { get; set; }
 
-        public int AccountId { get; set; }
-
-        public int Emotion { get; set; }
+        public Guid AccountId { get; set; }
 
         [StringLength(200)]
         public string Description { get; set; }
@@ -20,7 +20,7 @@ namespace PAP.DataBase
         public int Stars { get; set; }
 
         [ForeignKey(nameof(AccountId))]
-        public virtual Account Account { get; set; }
+        public virtual User Account { get; set; }
 
         [ForeignKey(nameof(ContentPublishAccountId))]
         public virtual ContentPublishAccount ContentPublishAccount { get; set; }

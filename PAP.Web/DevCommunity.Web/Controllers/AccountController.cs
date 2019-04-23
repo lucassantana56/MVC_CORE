@@ -16,14 +16,14 @@ namespace DevCommunity.Web.Controllers
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
-        private readonly UserManager<AccountViewModelBLL> _userManager;
-        private readonly SignInManager<AccountViewModelBLL> _signInManager;
+        private readonly UserManager<AccountViewModel> _userManager;
+        private readonly SignInManager<AccountViewModel> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
         public AccountController(
-            UserManager<AccountViewModelBLL> userManager,
-            SignInManager<AccountViewModelBLL> signInManager,
+            UserManager<AccountViewModel> userManager,
+            SignInManager<AccountViewModel> signInManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger)
         {
@@ -216,15 +216,15 @@ namespace DevCommunity.Web.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new AccountViewModelBLL { UserName = model.Email, Email = model.Email };
-            //    var password = new AccountViewModelBLL { Password = model.Password };
+                var user = new AccountViewModel { UserName = model.Email, Email = model.Email };
+            //    var password = new AccountViewModel { Password = model.Password };
                 var result = await _userManager.CreateAsync(user, "0420010_Lu");
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                    var callbackUrl = Url.EmailConfirmationLink(user.Id.ToString(), code, Request.Scheme);
                     await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
@@ -307,7 +307,7 @@ namespace DevCommunity.Web.Controllers
                 {
                     throw new ApplicationException("Error loading external login information during confirmation.");
                 }
-                var user = new AccountViewModelBLL { UserName = model.Email, Email = model.Email };
+                var user = new AccountViewModel { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -367,7 +367,7 @@ namespace DevCommunity.Web.Controllers
                 // For more information on how to enable account confirmation and password reset please
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
+                var callbackUrl = Url.ResetPasswordCallbackLink(user.Id.ToString(), code, Request.Scheme);
                 await _emailSender.SendEmailAsync(model.Email, "Reset Password",
                    $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
                 return RedirectToAction(nameof(ForgotPasswordConfirmation));

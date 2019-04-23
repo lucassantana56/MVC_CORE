@@ -1,6 +1,6 @@
 ﻿@using DevCommunity.Web.Views.Manage
 @using PAP.Business.AccountViewModels;
-@inject SignInManager<AccountViewModelBLL> SignInManager
+@inject SignInManager<AccountViewModel> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }

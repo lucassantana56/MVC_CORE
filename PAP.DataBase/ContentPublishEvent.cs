@@ -1,17 +1,10 @@
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace PAP.DataBase
 {
-  
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
-    public partial class ContentPublishEvent
-    {
-        public ContentPublishEvent()
-        {
-            FeedBackContentEvent = new HashSet<FeedBackContentEvent>();
-            PhotoContentPublishEvent = new HashSet<PhotoContentPublishEvent>();
-        }
+    public  class ContentPublishEvent
+    {       
         [Key]
         public int ContentPublishEventId { get; set; }
 

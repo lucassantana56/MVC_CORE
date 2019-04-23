@@ -1,9 +1,8 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace PAP.DataBase
 {
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
-    public partial class VideoContentPublishAccount
+    public class VideoContentPublishAccount
     {
         [Key]
         public int VideoContentPublishAccountId { get; set; }

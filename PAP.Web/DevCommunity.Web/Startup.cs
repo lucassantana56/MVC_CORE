@@ -26,13 +26,26 @@ namespace DevCommunity.Web
             services.AddDbContext<ApplicationDatabaseContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<AccountViewModelBLL, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDatabaseContext>()
-                .AddDefaultTokenProviders();
+
+            //services.AddDefaultIdentity<AccountViewModel>()
+            //    .AddEntityFrameworkStores<ApplicationDatabaseContext>()
+            //    .AddDefaultUI();
+
+            
+
+            //services.AddIdentity<AccountViewModel, AccountRoleViewModel>()
+            //    .AddEntityFrameworkStores<ApplicationDatabaseContext>()
+            //    .AddDefaultTokenProviders();
+
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddMvc()
+              .AddRazorPagesOptions(options =>
+              {
+                  options.Conventions.AuthorizeFolder("/Account/Manage");
+                  options.Conventions.AuthorizePage("/Account/Logout");
+              });
 
-            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

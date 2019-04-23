@@ -1,15 +1,15 @@
+using PAP.DataBase.Auth;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace PAP.DataBase
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-  
-
-    public partial class AccountNotifications
+    public  class AccountNotifications
     {
+        [Key]
         public int AccountNotificationsId { get; set; }
-
-        public int SenderAccountId { get; set; }
+        [Required]
+        public Guid SenderNotificationAccountId { get; set; }
 
         public int EventId { get; set; }
 
@@ -24,12 +24,16 @@ namespace PAP.DataBase
 
         public string RedirectUrl { get; set; }
 
+        public int AccountId { get; set; }
         public bool Seen { get; set; }
-
-        public int ReceiverAccountId { get; set; }
-
-        public virtual Account Account { get; set; }
-
+        [Required]
+        public Guid ReceiverNotificationAccountId { get; set; }
+     
+        [ForeignKey(nameof(EventId))]
         public virtual Event Event { get; set; }
+        [ForeignKey(nameof(SenderNotificationAccountId))]
+        public virtual User SenderNotificationAccount { get; set; }
+        [ForeignKey(nameof(ReceiverNotificationAccountId))]
+        public virtual User ReceiverNotificationAccount { get; set; }
     }
 }

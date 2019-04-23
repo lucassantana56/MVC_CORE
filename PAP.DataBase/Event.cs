@@ -1,21 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace PAP.DataBase
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
-
     
-    public partial class Event
-    {
-        public Event()
-        {
-            AccountNotifications = new HashSet<AccountNotifications>();
-            AccountOnEvent = new HashSet<AccountOnEvent>();
-            EventAccount = new HashSet<EventAccount>();
-            PublishEvent = new HashSet<PublishEvent>();
-        }
+    public class Event
+    {       
         [Key]
         public int EventId { get; set; }
 
@@ -38,8 +29,8 @@ namespace PAP.DataBase
 
         [StringLength(500)]
         public string Description { get; set; }
-
-        public int? Stars { get; set; }
+        [Required]
+        public int Stars { get; set; }
 
         public virtual ICollection<AccountNotifications> AccountNotifications { get; set; }
 

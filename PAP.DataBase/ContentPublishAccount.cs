@@ -5,13 +5,7 @@ namespace PAP.DataBase
     using System.ComponentModel.DataAnnotations.Schema;
 
     public partial class ContentPublishAccount
-    {
-        public ContentPublishAccount()
-        {
-            PhotoContentPublishAccount = new HashSet<PhotoContentPublishAccount>();
-            FeedBackContentAccount = new HashSet<FeedBackContentAccount>();
-            VideoContentPublishAccount = new HashSet<VideoContentPublishAccount>();
-        }
+    {  
         [Key]
         public int ContentPublishAccountId { get; set; }
 
@@ -26,11 +20,11 @@ namespace PAP.DataBase
         public string Tags { get; set; }
         [ForeignKey(nameof(AccountPublishId))]
         public virtual AccountPublish AccountPublish { get; set; }
-
-        public virtual ICollection<PhotoContentPublishAccount> PhotoContentPublishAccount { get; set; }
-
-        public virtual ICollection<FeedBackContentAccount> FeedBackContentAccount { get; set; }
-
-        public virtual ICollection<VideoContentPublishAccount> VideoContentPublishAccount { get; set; }
+        [InverseProperty(nameof(PhotoContentPublishAccount.PhotoContentPublishAccountId))]
+        public virtual ICollection<PhotoContentPublishAccount> PhotoContentPublishAccounts { get; set; }
+        [InverseProperty(nameof(FeedBackContentAccount.FeedBackContentAccountId))]
+        public virtual ICollection<FeedBackContentAccount> FeedBackContentAccounts { get; set; }
+        [InverseProperty(nameof(VideoContentPublishAccount.VideoContentPublishAccountId))]
+        public virtual ICollection<VideoContentPublishAccount> VideoContentPublishAccounts { get; set; }
     }
 }

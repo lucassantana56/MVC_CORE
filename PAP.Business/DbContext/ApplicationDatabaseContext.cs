@@ -1,19 +1,18 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PAP.DataBase;
+using PAP.DataBase.Auth;
 using System;
 
 namespace PAP.Business.DbContext
 {
 
-    public class ApplicationDatabaseContext : IdentityDbContext<Account,IdentityRole,string>
+    public class ApplicationDatabaseContext : IdentityDbContext<User, UserRole, Guid>
     {
-        public ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseContext> options) : base(options)
+        public ApplicationDatabaseContext(DbContextOptions options) : base(options)
         {
         }
 
-        public virtual DbSet<Account> Account { get; set; }
         public virtual DbSet<AccountNotifications> AccountNotifications { get; set; }
         public virtual DbSet<AccountOnEvent> AccountOnEvent { get; set; }
         public virtual DbSet<AccountPublish> AccountPublish { get; set; }
@@ -29,12 +28,12 @@ namespace PAP.Business.DbContext
         public virtual DbSet<PublishEvent> PublishEvent { get; set; }
         public virtual DbSet<VideoContentPublishAccount> VideoContentPublishAccount { get; set; }
         public virtual DbSet<VideoContentPublishEvent> VideoContentPublishEvent { get; set; }
-        public virtual DbSet<AccountRole> AccountRole  { get; set; }
-       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Account>()
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>()
                 .Property(A => A.Stars)
                 .HasDefaultValue(3);
             modelBuilder.Entity<Event>()
@@ -43,6 +42,37 @@ namespace PAP.Business.DbContext
             modelBuilder.Entity<FeedBackContentAccount>()
                 .Property(F => F.Stars)
                 .HasDefaultValue(3);
+            modelBuilder.Entity<FeedBackContentEvent>()
+              .Property(F => F.Stars)
+              .HasDefaultValue(3);
+            modelBuilder.Entity<AccountRelationship>()
+                .HasIndex(RA => new { RA.SenderAccountId, RA.ReceiverAccountId })
+                .IsUnique();
+
+
+            modelBuilder.Entity<AccountRelationship>()
+                .HasOne(AR => AR.ReceiverAccount)
+                .WithMany(x => x.ReceiverAccountRelationships)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AccountRelationship>()
+                .HasOne(AR => AR.SenderAccount)
+                .WithMany(x => x.SenderAccountRelationships)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AccountNotifications>()
+              .HasIndex(RA => new { RA.SenderNotificationAccountId, RA.ReceiverNotificationAccountId })
+              .IsUnique();
+
+            modelBuilder.Entity<AccountNotifications>()
+                .HasOne(AN => AN.ReceiverNotificationAccount )
+                .WithMany(x => x.ReceiverNotificationAccounts)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AccountNotifications>()
+                .HasOne(AN => AN.SenderNotificationAccount)
+                .WithMany(x => x.SenderNotificationAccount)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
