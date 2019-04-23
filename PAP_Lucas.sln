@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PAP.Business", "PAP.Busines
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Web", "3.Web", "{D47EDD71-02CF-4E6F-ADE0-3DB0F5E32100}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevCommunity2.Web", "DevCommunity2.Web\DevCommunity2.Web.csproj", "{31F26701-6F6D-4FAC-8AA5-27B9F192B6EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevCommunity2.Web", "DevCommunity2.Web\DevCommunity2.Web.csproj", "{31F26701-6F6D-4FAC-8AA5-27B9F192B6EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

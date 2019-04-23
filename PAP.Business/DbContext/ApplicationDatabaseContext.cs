@@ -13,7 +13,7 @@ namespace PAP.Business.DbContext
         {
         }
 
-        public virtual DbSet<AccountNotifications> AccountNotifications { get; set; }
+        public virtual DbSet<AccountNotification> AccountNotifications { get; set; }
         public virtual DbSet<AccountOnEvent> AccountOnEvent { get; set; }
         public virtual DbSet<AccountPublish> AccountPublish { get; set; }
         public virtual DbSet<AccountRelationship> AccountRelationship { get; set; }
@@ -32,6 +32,17 @@ namespace PAP.Business.DbContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<AccountPublish>()
+                .HasOne(AP => AP.ContentPublishAccounts)
+                .WithOne(I => I.AccountPublish)
+                .HasForeignKey<ContentPublishAccount>(C => C.AccountPublishId);
+
+
+            modelBuilder.Entity<PublishEvent>()
+                .HasOne(PE => PE.ContentPublishEvent)
+                .WithOne(I => I.PublishEvent)
+                .HasForeignKey<ContentPublishEvent>(C => C.PublishEventId);
 
             modelBuilder.Entity<User>()
                 .Property(A => A.Stars)
@@ -60,19 +71,27 @@ namespace PAP.Business.DbContext
                 .WithMany(x => x.SenderAccountRelationships)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<AccountNotifications>()
-              .HasIndex(RA => new { RA.SenderNotificationAccountId, RA.ReceiverNotificationAccountId })
+            modelBuilder.Entity<AccountNotification>()
+              .HasIndex(AN => new { AN.SenderNotificationAccountId, AN.ReceiverNotificationAccountId })
               .IsUnique();
 
-            modelBuilder.Entity<AccountNotifications>()
-                .HasOne(AN => AN.ReceiverNotificationAccount )
+            modelBuilder.Entity<AccountNotification>()
+                .HasOne(AN => AN.ReceiverNotificationAccount)
                 .WithMany(x => x.ReceiverNotificationAccounts)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<AccountNotifications>()
+            modelBuilder.Entity<AccountNotification>()
                 .HasOne(AN => AN.SenderNotificationAccount)
-                .WithMany(x => x.SenderNotificationAccount)
+                .WithMany(x => x.SenderNotificationAccounts )
                 .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<FeedBackContentAccount>()
+              .HasOne(AN => AN.AccountPublish)
+              .WithMany(x => x.FeedBackContentAccounts)
+              .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<FeedBackContentEvent>()
+             .HasOne(AN => AN.PublishEvent)
+             .WithMany(x => x.FeedBackContentEvents)
+             .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

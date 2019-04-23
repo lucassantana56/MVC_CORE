@@ -14,13 +14,13 @@ namespace PAP.DataBase
 
         [StringLength(500)]
         public string  GithubFile { get; set; }
-        [ForeignKey(nameof(PublishEventId))]
-        public virtual PublishEvent PublishEvent { get; set; }
+      
+        public PublishEvent PublishEvent { get; set; }
 
-        public virtual ICollection<FeedBackContentEvent> FeedBackContentEvent { get; set; }
-
-        public virtual ICollection<PhotoContentPublishEvent> PhotoContentPublishEvent { get; set; }
-        
-        public virtual ICollection<VideoContentPublishEvent> VideoContentPublishEvent { get; set; }
+       
+        [InverseProperty(nameof(PhotoContentPublishEvent.ContentPublishEvent))]
+        public virtual ICollection<PhotoContentPublishEvent> PhotoContentPublishEvents { get; set; }
+        [InverseProperty(nameof(VideoContentPublishEvent.ContentPublishEvent))]
+        public virtual ICollection<VideoContentPublishEvent> VideoContentPublishEvents { get; set; }
     }
 }

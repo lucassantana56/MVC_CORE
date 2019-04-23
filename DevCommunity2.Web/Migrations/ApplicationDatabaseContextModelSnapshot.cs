@@ -106,7 +106,7 @@ namespace DevCommunity2.Web.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("PAP.DataBase.AccountNotifications", b =>
+            modelBuilder.Entity("PAP.DataBase.AccountNotification", b =>
                 {
                     b.Property<int>("AccountNotificationsId")
                         .ValueGeneratedOnAdd()
@@ -332,7 +332,8 @@ namespace DevCommunity2.Web.Migrations
 
                     b.HasKey("ContentPublishEventId");
 
-                    b.HasIndex("PublishEventId");
+                    b.HasIndex("PublishEventId")
+                        .IsUnique();
 
                     b.ToTable("ContentPublishEvent");
                 });
@@ -358,7 +359,7 @@ namespace DevCommunity2.Web.Migrations
                     b.Property<string>("PhotoUrl")
                         .HasMaxLength(500);
 
-                    b.Property<int?>("Stars")
+                    b.Property<int>("Stars")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(3);
 
@@ -397,7 +398,7 @@ namespace DevCommunity2.Web.Migrations
 
                     b.Property<Guid>("AccountId");
 
-                    b.Property<int>("ContentPublishAccountId");
+                    b.Property<int>("AccountPublishId");
 
                     b.Property<string>("Description")
                         .HasMaxLength(200);
@@ -410,7 +411,7 @@ namespace DevCommunity2.Web.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("ContentPublishAccountId");
+                    b.HasIndex("AccountPublishId");
 
                     b.ToTable("FeedBackContentAccount");
                 });
@@ -423,10 +424,10 @@ namespace DevCommunity2.Web.Migrations
 
                     b.Property<Guid>("AccountId");
 
-                    b.Property<int>("ContentPublishEventId");
-
                     b.Property<string>("Description")
                         .HasMaxLength(200);
+
+                    b.Property<int>("EventPublishId");
 
                     b.Property<int>("Stars")
                         .ValueGeneratedOnAdd()
@@ -436,7 +437,7 @@ namespace DevCommunity2.Web.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("ContentPublishEventId");
+                    b.HasIndex("EventPublishId");
 
                     b.ToTable("FeedBackContentEvent");
                 });
@@ -579,7 +580,7 @@ namespace DevCommunity2.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("PAP.DataBase.AccountNotifications", b =>
+            modelBuilder.Entity("PAP.DataBase.AccountNotification", b =>
                 {
                     b.HasOne("PAP.DataBase.Event", "Event")
                         .WithMany("AccountNotifications")
@@ -592,7 +593,7 @@ namespace DevCommunity2.Web.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("PAP.DataBase.Auth.User", "SenderNotificationAccount")
-                        .WithMany("SenderNotificationAccount")
+                        .WithMany("SenderNotificationAccounts")
                         .HasForeignKey("SenderNotificationAccountId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
@@ -605,7 +606,7 @@ namespace DevCommunity2.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PAP.DataBase.Event", "Event")
-                        .WithMany("AccountOnEvent")
+                        .WithMany("AccountOnEvents")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -634,7 +635,7 @@ namespace DevCommunity2.Web.Migrations
             modelBuilder.Entity("PAP.DataBase.ContentPublishAccount", b =>
                 {
                     b.HasOne("PAP.DataBase.AccountPublish", "AccountPublish")
-                        .WithOne("ContentPublishAccount")
+                        .WithOne("ContentPublishAccounts")
                         .HasForeignKey("PAP.DataBase.ContentPublishAccount", "AccountPublishId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -642,8 +643,8 @@ namespace DevCommunity2.Web.Migrations
             modelBuilder.Entity("PAP.DataBase.ContentPublishEvent", b =>
                 {
                     b.HasOne("PAP.DataBase.PublishEvent", "PublishEvent")
-                        .WithMany("ContentPublishEvent")
-                        .HasForeignKey("PublishEventId")
+                        .WithOne("ContentPublishEvent")
+                        .HasForeignKey("PAP.DataBase.ContentPublishEvent", "PublishEventId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -655,7 +656,7 @@ namespace DevCommunity2.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PAP.DataBase.Event", "Event")
-                        .WithMany("EventAccount")
+                        .WithMany("EventAccounts")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -667,10 +668,10 @@ namespace DevCommunity2.Web.Migrations
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("PAP.DataBase.ContentPublishAccount", "ContentPublishAccount")
-                        .WithMany("FeedBackContentAccount")
-                        .HasForeignKey("ContentPublishAccountId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("PAP.DataBase.AccountPublish", "AccountPublish")
+                        .WithMany("FeedBackContentAccounts")
+                        .HasForeignKey("AccountPublishId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("PAP.DataBase.FeedBackContentEvent", b =>
@@ -680,16 +681,16 @@ namespace DevCommunity2.Web.Migrations
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("PAP.DataBase.ContentPublishEvent", "ContentPublishEvent")
-                        .WithMany("FeedBackContentEvent")
-                        .HasForeignKey("ContentPublishEventId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("PAP.DataBase.PublishEvent", "PublishEvent")
+                        .WithMany("FeedBackContentEvents")
+                        .HasForeignKey("EventPublishId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("PAP.DataBase.PhotoContentPublishAccount", b =>
                 {
                     b.HasOne("PAP.DataBase.ContentPublishAccount", "ContentPublishAccount")
-                        .WithMany("PhotoContentPublishAccount")
+                        .WithMany("PhotoContentPublishAccounts")
                         .HasForeignKey("ContentPublishAccountId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -697,7 +698,7 @@ namespace DevCommunity2.Web.Migrations
             modelBuilder.Entity("PAP.DataBase.PhotoContentPublishEvent", b =>
                 {
                     b.HasOne("PAP.DataBase.ContentPublishEvent", "ContentPublishEvent")
-                        .WithMany("PhotoContentPublishEvent")
+                        .WithMany("PhotoContentPublishEvents")
                         .HasForeignKey("ContentPublishEventId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -710,7 +711,7 @@ namespace DevCommunity2.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PAP.DataBase.Event", "Event")
-                        .WithMany("PublishEvent")
+                        .WithMany("PublishEvents")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -718,7 +719,7 @@ namespace DevCommunity2.Web.Migrations
             modelBuilder.Entity("PAP.DataBase.VideoContentPublishAccount", b =>
                 {
                     b.HasOne("PAP.DataBase.ContentPublishAccount", "ContentPublishAccount")
-                        .WithMany("VideoContentPublishAccount")
+                        .WithMany("VideoContentPublishAccounts")
                         .HasForeignKey("ContentPublishAccountId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -726,7 +727,7 @@ namespace DevCommunity2.Web.Migrations
             modelBuilder.Entity("PAP.DataBase.VideoContentPublishEvent", b =>
                 {
                     b.HasOne("PAP.DataBase.ContentPublishEvent", "ContentPublishEvent")
-                        .WithMany("VideoContentPublishEvent")
+                        .WithMany("VideoContentPublishEvents")
                         .HasForeignKey("ContentPublishEventId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

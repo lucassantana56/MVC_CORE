@@ -35,15 +35,17 @@ namespace PAP.DataBase.Auth
         [InverseProperty(nameof(FeedBackContentEvent.Account))]
         public virtual ICollection<FeedBackContentEvent> FeedBackContentEvents { get; set; }
 
-        //[InverseProperty(nameof(AccountRelationship.SenderAccount))]
+      [InverseProperty(nameof(AccountRelationship.SenderAccount))]
         public virtual ICollection<AccountRelationship> SenderAccountRelationships { get; set; }
-        //[InverseProperty(nameof(AccountRelationship.ReceiverAccount))]
+
+       [InverseProperty(nameof(AccountRelationship.ReceiverAccount))]
         public virtual ICollection<AccountRelationship> ReceiverAccountRelationships { get; set; }
 
-        [InverseProperty(nameof(AccountNotifications.SenderNotificationAccount))]
-        public virtual ICollection<AccountNotifications> SenderNotificationAccount { get; set; }
-        [InverseProperty(nameof(AccountNotifications.ReceiverNotificationAccount))]
-        public virtual ICollection<AccountNotifications> ReceiverNotificationAccounts { get; set; }
+      [InverseProperty(nameof(AccountNotification.SenderNotificationAccount))]
+        public virtual ICollection<AccountNotification> SenderNotificationAccounts { get; set; }
+
+      [InverseProperty(nameof(AccountNotification.ReceiverNotificationAccount))]
+        public virtual ICollection<AccountNotification> ReceiverNotificationAccounts { get; set; }
 
     }
 }

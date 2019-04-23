@@ -4,24 +4,24 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace PAP.DataBase
 {
-    
+
     public class Event
-    {       
+    {
         [Key]
         public int EventId { get; set; }
 
         [StringLength(20)]
         public string NameEvent { get; set; }
 
-       
+
         public DateTime DateCreated { get; set; }
 
-      
+
         public DateTime DateEvent { get; set; }
 
         [StringLength(20)]
         public string TypeOfEvent { get; set; }
-       
+
         public string LocationWhat3words { get; set; }
 
         [StringLength(500)]
@@ -32,12 +32,15 @@ namespace PAP.DataBase
         [Required]
         public int Stars { get; set; }
 
-        public virtual ICollection<AccountNotifications> AccountNotifications { get; set; }
+        [InverseProperty(nameof(AccountNotification.Event))]
+        public virtual ICollection<AccountNotification> AccountNotifications { get; set; }
 
-        public virtual ICollection<AccountOnEvent> AccountOnEvent { get; set; }
+        [InverseProperty(nameof(AccountOnEvent.Event))]
+        public virtual ICollection<AccountOnEvent> AccountOnEvents { get; set; }
+        [InverseProperty(nameof(EventAccount.Event))]
+        public virtual ICollection<EventAccount> EventAccounts { get; set; }
 
-        public virtual ICollection<EventAccount> EventAccount { get; set; }
-
-        public virtual ICollection<PublishEvent> PublishEvent { get; set; }
+        [InverseProperty(nameof(PublishEvent.Event))]
+        public virtual ICollection<PublishEvent> PublishEvents { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DevCommunity2.Web.Migrations
 {
-    public partial class mg1 : Migration
+    public partial class mig1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -67,7 +67,7 @@ namespace DevCommunity2.Web.Migrations
                     LocationWhat3words = table.Column<string>(nullable: true),
                     PhotoUrl = table.Column<string>(maxLength: 500, nullable: true),
                     Description = table.Column<string>(maxLength: 500, nullable: true),
-                    Stars = table.Column<int>(nullable: true, defaultValue: 3)
+                    Stars = table.Column<int>(nullable: false, defaultValue: 3)
                 },
                 constraints: table =>
                 {
@@ -351,10 +351,10 @@ namespace DevCommunity2.Web.Migrations
                 {
                     ContentPublishAccountId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AccountPublishId = table.Column<int>(nullable: false),
                     TextContent = table.Column<string>(nullable: true),
                     GithubFile = table.Column<string>(maxLength: 500, nullable: true),
-                    Tags = table.Column<string>(nullable: true)
+                    Tags = table.Column<string>(nullable: true),
+                    AccountPublishId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -365,6 +365,34 @@ namespace DevCommunity2.Web.Migrations
                         principalTable: "AccountPublish",
                         principalColumn: "AccountPublishId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FeedBackContentAccount",
+                columns: table => new
+                {
+                    FeedBackContentAccountId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AccountPublishId = table.Column<int>(nullable: false),
+                    AccountId = table.Column<Guid>(nullable: false),
+                    Description = table.Column<string>(maxLength: 200, nullable: true),
+                    Stars = table.Column<int>(nullable: false, defaultValue: 3)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FeedBackContentAccount", x => x.FeedBackContentAccountId);
+                    table.ForeignKey(
+                        name: "FK_FeedBackContentAccount_AspNetUsers_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FeedBackContentAccount_AccountPublish_AccountPublishId",
+                        column: x => x.AccountPublishId,
+                        principalTable: "AccountPublish",
+                        principalColumn: "AccountPublishId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -389,31 +417,31 @@ namespace DevCommunity2.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FeedBackContentAccount",
+                name: "FeedBackContentEvent",
                 columns: table => new
                 {
-                    FeedBackContentAccountId = table.Column<int>(nullable: false)
+                    IdFeedBackContent = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ContentPublishAccountId = table.Column<int>(nullable: false),
+                    EventPublishId = table.Column<int>(nullable: false),
                     AccountId = table.Column<Guid>(nullable: false),
-                    Description = table.Column<string>(maxLength: 200, nullable: true),
-                    Stars = table.Column<int>(nullable: false, defaultValue: 3)
+                    Stars = table.Column<int>(nullable: false, defaultValue: 3),
+                    Description = table.Column<string>(maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FeedBackContentAccount", x => x.FeedBackContentAccountId);
+                    table.PrimaryKey("PK_FeedBackContentEvent", x => x.IdFeedBackContent);
                     table.ForeignKey(
-                        name: "FK_FeedBackContentAccount_AspNetUsers_AccountId",
+                        name: "FK_FeedBackContentEvent_AspNetUsers_AccountId",
                         column: x => x.AccountId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_FeedBackContentAccount_ContentPublishAccount_ContentPublishAccountId",
-                        column: x => x.ContentPublishAccountId,
-                        principalTable: "ContentPublishAccount",
-                        principalColumn: "ContentPublishAccountId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_FeedBackContentEvent_PublishEvent_EventPublishId",
+                        column: x => x.EventPublishId,
+                        principalTable: "PublishEvent",
+                        principalColumn: "PublishEventId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -453,34 +481,6 @@ namespace DevCommunity2.Web.Migrations
                         column: x => x.ContentPublishAccountId,
                         principalTable: "ContentPublishAccount",
                         principalColumn: "ContentPublishAccountId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FeedBackContentEvent",
-                columns: table => new
-                {
-                    IdFeedBackContent = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ContentPublishEventId = table.Column<int>(nullable: false),
-                    AccountId = table.Column<Guid>(nullable: false),
-                    Stars = table.Column<int>(nullable: false, defaultValue: 3),
-                    Description = table.Column<string>(maxLength: 200, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FeedBackContentEvent", x => x.IdFeedBackContent);
-                    table.ForeignKey(
-                        name: "FK_FeedBackContentEvent_AspNetUsers_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FeedBackContentEvent_ContentPublishEvent_ContentPublishEventId",
-                        column: x => x.ContentPublishEventId,
-                        principalTable: "ContentPublishEvent",
-                        principalColumn: "ContentPublishEventId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -614,7 +614,8 @@ namespace DevCommunity2.Web.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ContentPublishEvent_PublishEventId",
                 table: "ContentPublishEvent",
-                column: "PublishEventId");
+                column: "PublishEventId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventAccount_AccountId",
@@ -632,9 +633,9 @@ namespace DevCommunity2.Web.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FeedBackContentAccount_ContentPublishAccountId",
+                name: "IX_FeedBackContentAccount_AccountPublishId",
                 table: "FeedBackContentAccount",
-                column: "ContentPublishAccountId");
+                column: "AccountPublishId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FeedBackContentEvent_AccountId",
@@ -642,9 +643,9 @@ namespace DevCommunity2.Web.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FeedBackContentEvent_ContentPublishEventId",
+                name: "IX_FeedBackContentEvent_EventPublishId",
                 table: "FeedBackContentEvent",
-                column: "ContentPublishEventId");
+                column: "EventPublishId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PhotoContentPublishAccount_ContentPublishAccountId",

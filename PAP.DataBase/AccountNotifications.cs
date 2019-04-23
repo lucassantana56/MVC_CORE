@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace PAP.DataBase
 {
-    public  class AccountNotifications
+    public  class AccountNotification
     {
         [Key]
         public int AccountNotificationsId { get; set; }

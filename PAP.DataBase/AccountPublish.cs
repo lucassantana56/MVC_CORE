@@ -18,7 +18,11 @@ namespace PAP.DataBase
 
         [ForeignKey(nameof(AccountId))]
         public virtual User Account { get; set; }
-        public virtual  ContentPublishAccount ContentPublishAccount { get; set; }
+     
+        [InverseProperty(nameof(FeedBackContentAccount.AccountPublish))]
+        public virtual ICollection<FeedBackContentAccount> FeedBackContentAccounts { get; set; }
+
+        public ContentPublishAccount ContentPublishAccounts { get; set; }
 
     }
 }

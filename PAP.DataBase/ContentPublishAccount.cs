@@ -9,8 +9,6 @@ namespace PAP.DataBase
         [Key]
         public int ContentPublishAccountId { get; set; }
 
-        public int AccountPublishId { get; set; }
-
         public string TextContent { get; set; }
 
         [StringLength(500)]
@@ -18,13 +16,13 @@ namespace PAP.DataBase
 
        
         public string Tags { get; set; }
-        [ForeignKey(nameof(AccountPublishId))]
-        public virtual AccountPublish AccountPublish { get; set; }
-        [InverseProperty(nameof(PhotoContentPublishAccount.PhotoContentPublishAccountId))]
+
+        public int AccountPublishId { get; set; }
+        public AccountPublish AccountPublish { get; set; }
+
+        [InverseProperty(nameof(PhotoContentPublishAccount.ContentPublishAccount))]
         public virtual ICollection<PhotoContentPublishAccount> PhotoContentPublishAccounts { get; set; }
-        [InverseProperty(nameof(FeedBackContentAccount.FeedBackContentAccountId))]
-        public virtual ICollection<FeedBackContentAccount> FeedBackContentAccounts { get; set; }
-        [InverseProperty(nameof(VideoContentPublishAccount.VideoContentPublishAccountId))]
+        [InverseProperty(nameof(VideoContentPublishAccount.ContentPublishAccount))]
         public virtual ICollection<VideoContentPublishAccount> VideoContentPublishAccounts { get; set; }
     }
 }

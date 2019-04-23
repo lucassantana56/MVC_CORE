@@ -10,7 +10,7 @@ namespace PAP.DataBase
         [Key]
         public int FeedBackContentAccountId { get; set; }
 
-        public int ContentPublishAccountId { get; set; }
+        public int AccountPublishId { get; set; }
 
         public Guid AccountId { get; set; }
 
@@ -22,7 +22,7 @@ namespace PAP.DataBase
         [ForeignKey(nameof(AccountId))]
         public virtual User Account { get; set; }
 
-        [ForeignKey(nameof(ContentPublishAccountId))]
-        public virtual ContentPublishAccount ContentPublishAccount { get; set; }
+        [ForeignKey(nameof(AccountPublishId))]
+        public virtual AccountPublish AccountPublish { get; set; }
     }
 }

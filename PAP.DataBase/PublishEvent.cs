@@ -19,7 +19,10 @@ namespace PAP.DataBase
         [ForeignKey(nameof(AccountId))]
         public virtual User Account { get; set; }
 
-        public virtual ICollection<ContentPublishEvent> ContentPublishEvent { get; set; }
+        public ContentPublishEvent ContentPublishEvent { get; set; }
+
+        [InverseProperty(nameof(FeedBackContentEvent.PublishEvent))]
+        public virtual ICollection<FeedBackContentEvent> FeedBackContentEvents { get; set; }
 
         [ForeignKey(nameof(EventId))]
         public virtual Event Event { get; set; }
