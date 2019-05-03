@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28809.33
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.Models", "0.Models", "{6CFEABD2-A63E-403C-B8F9-0B168ADE0008}"
 EndProject
@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PAP.DataBase", "PAP.DataBas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PAP.Business", "PAP.Business\PAP.Business.csproj", "{0AD7541E-8964-4482-B196-B8D88CBB70CF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Web", "3.Web", "{D47EDD71-02CF-4E6F-ADE0-3DB0F5E32100}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Web", "2.Web", "{D47EDD71-02CF-4E6F-ADE0-3DB0F5E32100}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevCommunity2.Web", "PAP.Web\DevCommunity2.Web\DevCommunity2.Web.csproj", "{8480B9CC-EA2C-4712-90EB-57FFEDB79546}"
 EndProject
