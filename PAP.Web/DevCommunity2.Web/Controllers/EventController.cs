@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PAP.Business.EventBLL;
+using Microsoft.EntityFrameworkCore;
+using PAP.Business;
+using PAP.Business.DbContext;
 using PAP.Business.ViewModels;
 
 namespace DevCommunity2.Web.Controllers
@@ -12,20 +15,34 @@ namespace DevCommunity2.Web.Controllers
    
     public class EventController : Controller
     {
-        EventBLL _eventBLL = new EventBLL();    
+      
+
         // GET: Event
         public ActionResult Index()
         {
-            return View();
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDatabaseContext>();
+            var unitOfWork = new UnitOfWork(new ApplicationDatabaseContext(optionsBuilder.Options));
+            return View(unitOfWork.Events.GetAll());
         }
 
         // GET: Event/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details()
         {
-            return View();
+            try
+            {
+                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDatabaseContext>();
+                var unitOfWork = new UnitOfWork(new ApplicationDatabaseContext(optionsBuilder.Options));
+                return View(unitOfWork.Events.Get(1));
+            }
+            catch (Exception)
+            {
+                 return View();
+                  throw;
+            }        
         }
 
         // GET: Event/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -39,7 +56,10 @@ namespace DevCommunity2.Web.Controllers
             try
             {
                 // TODO: Add insert logic here
-                _eventBLL.CreateEvent(@event.DateCreated,@event.Description,@event.LocationWhat3words,@event.NameEvent,@event.PhotoUrl);
+                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDatabaseContext>();
+                var unitOfWork = new UnitOfWork(new ApplicationDatabaseContext(optionsBuilder.Options));
+                unitOfWork.Events.Add(@event);
+                unitOfWork.Complete();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -51,24 +71,37 @@ namespace DevCommunity2.Web.Controllers
         // GET: Event/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            try
+            {
+                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDatabaseContext>();
+                var unitOfWork = new UnitOfWork(new ApplicationDatabaseContext(optionsBuilder.Options));
+                return View(unitOfWork.Events.Get(id));
+            }
+            catch (Exception)
+            {
+                return View();
+                throw;
+            }
         }
 
         // POST: Event/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
+        public ActionResult Edit([Bind("EventId,NameEvent,DateCreated,DateEvent,TypeOfEvent,LocationWhat3words,PhotoUrl,Description,Stars")] EventViewModel @event)
+        {           
                 // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+                try
+                {
+                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDatabaseContext>();
+                var unitOfWork = new UnitOfWork(new ApplicationDatabaseContext(optionsBuilder.Options));
+                unitOfWork.Events.EditEvent(@event);
+                    return View();
+                }
+                catch (Exception)
+                {
+                    return View();
+                    throw;
+                }         
         }
 
         // GET: Event/Delete/5
@@ -80,12 +113,14 @@ namespace DevCommunity2.Web.Controllers
         // POST: Event/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete([Bind("EventId,NameEvent,DateCreated,DateEvent,TypeOfEvent,LocationWhat3words,PhotoUrl,Description,Stars")] EventViewModel @event)
         {
             try
             {
                 // TODO: Add delete logic here
-
+                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDatabaseContext>();
+                var unitOfWork = new UnitOfWork(new ApplicationDatabaseContext(optionsBuilder.Options));
+                unitOfWork.Events.Remove(@event);
                 return RedirectToAction(nameof(Index));
             }
             catch

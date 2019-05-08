@@ -55,11 +55,8 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
-            [Required]
-            [Display(Name ="Nick Name")]
-            public string  NickName { get; set; }
-
         }
+
         public void OnGet(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
@@ -70,7 +67,7 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = Input.NickName, Email = Input.Email };
+                var user = new User { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
