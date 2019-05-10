@@ -11,6 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using PAP.Business.DbContext;
 using PAP.Business.Managers;
 using PAP.DataBase.Auth;
+using PAP.Business.Repositories;
+using PAP.Business.Persistence.Repositories;
+using PAP.Business;
 
 namespace DevCommunity2.Web
 {
@@ -74,6 +77,9 @@ namespace DevCommunity2.Web
                 //options.SlidingExpiration = true;
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddTransient<IEventRepository, EventRepository>();
+            services.AddTransient<BaseManager>();
             services.AddTransient<ApplicationUserManager>();
         }
 

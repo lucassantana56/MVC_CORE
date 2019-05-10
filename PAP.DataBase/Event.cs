@@ -24,6 +24,8 @@ namespace PAP.DataBase
 
         public string LocationWhat3words { get; set; }
 
+        public string Location { get; set; }
+
         [StringLength(500)]
         public string PhotoUrl { get; set; }
 

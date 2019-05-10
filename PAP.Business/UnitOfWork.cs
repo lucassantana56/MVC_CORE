@@ -11,17 +11,13 @@ namespace PAP.Business
     {
         private readonly ApplicationDatabaseContext _context;
 
-        public UnitOfWork(ApplicationDatabaseContext context)
+        public readonly EventRepository Events;
+
+        public UnitOfWork(ApplicationDatabaseContext context,
+            IEventRepository eventRepo)
         {
+            Events = (EventRepository)eventRepo;
             _context = context;
-            Events = new EventRepository(_context);
-        }
-
-        public IEventRepository Events { get;private set; }
-
-        public int Complete()
-        {
-            return _context.SaveChanges();
         }
 
         public void Dispose()

@@ -7,38 +7,45 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PAP.Business;
-using PAP.Business.DbContext;
+using PAP.Business.Managers;
+using PAP.Business.Persistence.Repositories;
+using PAP.Business.Repositories;
 using PAP.Business.ViewModels;
 
 namespace DevCommunity2.Web.Controllers
 {
-   
+
     public class EventController : Controller
     {
-      
+
+        private readonly EventRepository _eventRepo;
+        private readonly BaseManager _BaseManager;
+
+        public EventController(IEventRepository eventRepo,BaseManager baseManager)
+        {
+            _eventRepo = (EventRepository)eventRepo;
+            _BaseManager = (BaseManager)baseManager;
+        }
+
 
         // GET: Event
         public ActionResult Index()
         {
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDatabaseContext>();
-            var unitOfWork = new UnitOfWork(new ApplicationDatabaseContext(optionsBuilder.Options));
-            return View(unitOfWork.Events.GetAll());
+            return View(_eventRepo.GetAll());
         }
 
         // GET: Event/Details/5
-        public ActionResult Details()
+        public ActionResult Details(int id)
         {
             try
             {
-                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDatabaseContext>();
-                var unitOfWork = new UnitOfWork(new ApplicationDatabaseContext(optionsBuilder.Options));
-                return View(unitOfWork.Events.Get(1));
+                return View(_eventRepo.Get(id));
             }
             catch (Exception)
             {
-                 return View();
-                  throw;
-            }        
+                return View();
+                throw;
+            }
         }
 
         // GET: Event/Create
@@ -47,19 +54,20 @@ namespace DevCommunity2.Web.Controllers
         {
             return View();
         }
-
+        public ActionResult tst()
+        {
+            return View();
+        }
         // POST: Event/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind("EventId,NameEvent,DateCreated,DateEvent,TypeOfEvent,LocationWhat3words,PhotoUrl,Description,Stars")] EventViewModel @event)
+        public ActionResult Create(EventViewModel @event)
         {
             try
             {
                 // TODO: Add insert logic here
-                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDatabaseContext>();
-                var unitOfWork = new UnitOfWork(new ApplicationDatabaseContext(optionsBuilder.Options));
-                unitOfWork.Events.Add(@event);
-                unitOfWork.Complete();
+                _eventRepo.Add(@event);
+                _BaseManager.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -73,9 +81,7 @@ namespace DevCommunity2.Web.Controllers
         {
             try
             {
-                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDatabaseContext>();
-                var unitOfWork = new UnitOfWork(new ApplicationDatabaseContext(optionsBuilder.Options));
-                return View(unitOfWork.Events.Get(id));
+                return View();
             }
             catch (Exception)
             {
@@ -88,20 +94,18 @@ namespace DevCommunity2.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind("EventId,NameEvent,DateCreated,DateEvent,TypeOfEvent,LocationWhat3words,PhotoUrl,Description,Stars")] EventViewModel @event)
-        {           
-                // TODO: Add update logic here
-                try
-                {
-                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDatabaseContext>();
-                var unitOfWork = new UnitOfWork(new ApplicationDatabaseContext(optionsBuilder.Options));
-                unitOfWork.Events.EditEvent(@event);
-                    return View();
-                }
-                catch (Exception)
-                {
-                    return View();
-                    throw;
-                }         
+        {
+            // TODO: Add update logic here
+            try
+            {
+                _eventRepo.EditEvent(@event);
+                return View();
+            }
+            catch (Exception)
+            {
+                return View();
+                throw;
+            }
         }
 
         // GET: Event/Delete/5
@@ -113,14 +117,13 @@ namespace DevCommunity2.Web.Controllers
         // POST: Event/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete([Bind("EventId,NameEvent,DateCreated,DateEvent,TypeOfEvent,LocationWhat3words,PhotoUrl,Description,Stars")] EventViewModel @event)
+        public ActionResult Delete(EventViewModel @event)
         {
             try
             {
                 // TODO: Add delete logic here
-                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDatabaseContext>();
-                var unitOfWork = new UnitOfWork(new ApplicationDatabaseContext(optionsBuilder.Options));
-                unitOfWork.Events.Remove(@event);
+                //_eventRepo.Remove(@event);
+                //_eventRepo.Complete();
                 return RedirectToAction(nameof(Index));
             }
             catch
