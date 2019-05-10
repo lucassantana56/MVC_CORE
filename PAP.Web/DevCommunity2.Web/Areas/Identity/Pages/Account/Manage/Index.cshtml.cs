@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using PAP.Business.Persistence.Repositories;
+using PAP.Business.Repositories;
 using PAP.DataBase.Auth;
 
 namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
@@ -17,15 +19,18 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly IAccountRepository _AccountRepository;
 
         public IndexModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IAccountRepository AccountRepo)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _AccountRepository = (AccountRepository)AccountRepo;
         }
 
 
@@ -114,7 +119,9 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
                     throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
                 }
             }
-            
+
+            _AccountRepository.UpdateData(user);
+
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();

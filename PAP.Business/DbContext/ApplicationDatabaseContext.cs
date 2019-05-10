@@ -47,15 +47,23 @@ namespace PAP.Business.DbContext
             modelBuilder.Entity<User>()
                 .Property(A => A.Stars)
                 .HasDefaultValue(3);
+
+            modelBuilder.Entity<Event>()
+                .Property(E => E.IsEnabled)
+                .HasDefaultValue(1);
+
             modelBuilder.Entity<Event>()
                 .Property(E => E.Stars)
                 .HasDefaultValue(3);
+
             modelBuilder.Entity<FeedBackContentAccount>()
                 .Property(F => F.Stars)
                 .HasDefaultValue(3);
+
             modelBuilder.Entity<FeedBackContentEvent>()
               .Property(F => F.Stars)
               .HasDefaultValue(3);
+
             modelBuilder.Entity<AccountRelationship>()
                 .HasIndex(RA => new { RA.SenderAccountId, RA.ReceiverAccountId })
                 .IsUnique();

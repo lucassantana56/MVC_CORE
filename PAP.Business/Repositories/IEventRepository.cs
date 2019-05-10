@@ -10,7 +10,7 @@ namespace PAP.Business.Repositories
     {
         EventViewModel Get(int id);
         IEnumerable<EventViewModel> GetAll();
-        void Add(EventViewModel @event);
+        void Add(EventViewModel @event,Guid UserId);
         void Remove(EventViewModel @event);
         void EditEvent(EventViewModel @event);
     }

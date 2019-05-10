@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Internal;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Internal;
 using PAP.Business.DbContext;
 using PAP.Business.Repositories;
 using PAP.Business.ViewModels;
@@ -24,7 +25,7 @@ namespace PAP.Business.Persistence.Repositories
             var @event = _context.Event.Select(e => new EventViewModel()
             {
                 EventId = e.EventId,
-                EventName= e.NameEvent,
+                EventName = e.NameEvent,
                 EventDate = e.DateEvent,
                 TypeOfEvent = e.TypeOfEvent,
                 Location = e.Location
@@ -33,7 +34,7 @@ namespace PAP.Business.Persistence.Repositories
             return @event;
         }
 
-        public  IEnumerable<EventViewModel> GetAll()
+        public IEnumerable<EventViewModel> GetAll()
         {
             var @event = _context.Event.Select(e => new EventViewModel()
             {
@@ -46,43 +47,56 @@ namespace PAP.Business.Persistence.Repositories
             return @event.ToList();
         }
 
-        //public EventViewModel GetEventByUser()
-        //{
-        //    var @event = _context.Event.Select(e => new EventViewModel()
-        //    {
-        //        accs = e.EventAccounts.Select
-        //    })
-
-
-        //}
-
-        public void Add(EventViewModel entity)
+        public EventViewModel GetEventByUser(Guid userId)
         {
-            var @event = new Event();
-            @event.DateCreated = DateTime.Now.Date;
-            @event.DateEvent = entity.EventDate;
-            @event.Description = entity.Description;
-            @event.Location = entity.Location;
-            @event.NameEvent = entity.EventName;
-            if (entity.PhotoUrl==null)
+            var @event = _context.Event.Select(e => new EventViewModel()
             {
-             @event.PhotoUrl = "~/Images/EventPhotos/DefaulEventPhoto.png";
-            }
-            else
+                UserId = userId,
+                EventId = e.EventId,
+                EventName = e.NameEvent,
+                EventDate = e.DateEvent,
+                TypeOfEvent = e.TypeOfEvent,
+                Location = e.Location
+            }).FirstOrDefault(e=> e.UserId == userId);
+            return @event;
+            
+        }
+
+        public void Add(EventViewModel entity, Guid userId)
+        {
+            if (entity.PhotoUrl == null)
             {
-                @event.PhotoUrl = entity.PhotoUrl;
+                entity.PhotoUrl = "~/Images/EventPhotos/DefaulEventPhoto.png";
             }
-            @event.TypeOfEvent = entity.TypeOfEvent;
-                       
+
+            var @event = new Event()
+            {
+                DateCreated = DateTime.Now.Date,
+                DateEvent = entity.EventDate,
+                Description = entity.Description,
+                Location = entity.Location,
+                NameEvent = entity.EventName,
+                PhotoUrl = entity.PhotoUrl,
+                TypeOfEvent = entity.TypeOfEvent,
+            };
+
             _context.Event.Add(@event);
+
+            if (userId != null)
+            {
+                var eventAccount = new EventAccount()
+                {
+                    AccountId = userId,
+                    EventId = @event.EventId,
+                };
+                _context.EventAccount.Add(eventAccount);
+            }
         }
 
         public void Remove(EventViewModel entity)
         {
-            var @event = new Event();
-            @event.EventId = entity.EventId;
-
-            _context.Event.Remove(@event);
+            var @event = _context.Event.Find(entity.EventId);
+            @event.IsEnabled = false;
         }
 
         public void EditEvent(EventViewModel entity)
@@ -95,9 +109,9 @@ namespace PAP.Business.Persistence.Repositories
                 TypeOfEvent = e.TypeOfEvent,
                 Location = e.Location,
                 PhotoUrl = e.PhotoUrl
-                
-            }).FirstOrDefault( e=> e.EventId == entity.EventId);         
-        } 
+
+            }).FirstOrDefault(e => e.EventId == entity.EventId);
+        }
     }
 
 }

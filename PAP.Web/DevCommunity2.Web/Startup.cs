@@ -79,6 +79,8 @@ namespace DevCommunity2.Web
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddTransient<IEventRepository, EventRepository>();
+            services.AddTransient<IAccountRepository, AccountRepository>();
+
             services.AddTransient<BaseManager>();
             services.AddTransient<ApplicationUserManager>();
         }

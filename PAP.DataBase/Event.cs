@@ -34,6 +34,8 @@ namespace PAP.DataBase
         [Required]
         public int Stars { get; set; }
 
+        public bool  IsEnabled { get; set; }
+
         [InverseProperty(nameof(AccountNotification.Event))]
         public virtual ICollection<AccountNotification> AccountNotifications { get; set; }
 

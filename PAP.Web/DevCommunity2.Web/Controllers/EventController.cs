@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -65,8 +66,11 @@ namespace DevCommunity2.Web.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
-                _eventRepo.Add(@event);
+                //  string userid = User.
+                //Guid.TryParse(userid, out Guid usertst);
+                // TODO: Add insert logic here           
+                Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier),out Guid userId);
+                _eventRepo.Add(@event, userId);
                 _BaseManager.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
