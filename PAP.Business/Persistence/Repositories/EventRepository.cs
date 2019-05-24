@@ -57,9 +57,21 @@ namespace PAP.Business.Persistence.Repositories
                 EventDate = e.DateEvent,
                 TypeOfEvent = e.TypeOfEvent,
                 Location = e.Location
-            }).FirstOrDefault(e=> e.UserId == userId);
+            }).FirstOrDefault(e => e.UserId == userId);
             return @event;
-            
+
+        }
+
+        public EventViewModel GetEventsNameByUser(Guid userId)
+        {
+            var @event = _context.Event.Select(e => new EventViewModel()
+            {        
+                EventName = e.NameEvent,
+                
+            }).FirstOrDefault(e => e.UserId == userId);
+
+            return @event;
+
         }
 
         public void Add(EventViewModel entity, Guid userId)
@@ -89,6 +101,7 @@ namespace PAP.Business.Persistence.Repositories
                     AccountId = userId,
                     EventId = @event.EventId,
                 };
+
                 _context.EventAccount.Add(eventAccount);
             }
         }

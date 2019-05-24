@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using PAP.DataBase.Auth;
+using Microsoft.AspNetCore.Http;
 
 namespace DevCommunity2.Web.Areas.Identity.Pages.Account
 {

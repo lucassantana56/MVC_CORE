@@ -25,12 +25,32 @@ namespace PAP.Business.Persistence.Repositories
                 user.PhotoUrl = "~Images/UserPhotos/DefaultUserPhoto.png";
             }
 
-            var User = _context.Event.Select(e => new AccountViewModel()
-            {
-                Country = user.Country,
-                PhotoUrl = user.PhotoUrl,
-                ProgramminglLanguages = user.ProgrammingLanguages,
-            }).FirstOrDefault(e => e.UserId == user.Id);
+            var User = _context.Users
+                .Where(e => e.Id == user.Id)
+                .Select(e => new AccountViewModel()
+                {
+                    Country = user.Country,
+                    PhotoUrl = user.PhotoUrl,
+                    ProgramminglLanguages = user.ProgrammingLanguages,
+                }).FirstOrDefault();
         }
+
+        public AccountViewModel GetUserInfo(Guid userId)
+        {
+
+
+
+            var User = _context.Users
+                .Where(e => e.Id == userId)
+                .Select(e => new AccountViewModel()
+                {
+                    UserName = e.UserName,
+                    PhotoUrl = e.PhotoUrl,
+                }).FirstOrDefault();
+
+            return User;
+
+        }
+
     }
 }

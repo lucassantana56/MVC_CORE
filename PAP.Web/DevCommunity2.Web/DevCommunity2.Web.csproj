@@ -23,8 +23,19 @@
     <Compile Remove="Migrations\20190510172620_mg3.Designer.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\Images\EventPhotos\DefaulEventPhoto.png" />
+    <Content Remove="wwwroot\Images\UserPhotos\DefaultUserPhoto.png" />
+  </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\Images\EventPhotos\DefaulEventPhoto.png" />
+    <None Include="wwwroot\Images\UserPhotos\DefaultUserPhoto.png" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Font.Awesome" Version="5.8.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />

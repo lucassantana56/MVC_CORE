@@ -1,0 +1,16 @@
+﻿@model List<FeedIndexViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/LayoutAuth.cshtml";
+}
+
+@{ 
+    FeedPostViewModel fpvm = new FeedPostViewModel();
+}
+
+<partial name="_FeedCreatePost" model="fpvm" />
+
+@foreach (var item in Model)
+{
+  <partial name="_FeedIndexViewModel" model="item" />
+}

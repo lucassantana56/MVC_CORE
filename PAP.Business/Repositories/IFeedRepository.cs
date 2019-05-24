@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PAP.Business.Repositories
 {
-    class IFeedRepository
+    public interface IFeedRepository
     {
     }
 }

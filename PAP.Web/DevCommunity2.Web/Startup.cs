@@ -80,6 +80,9 @@ namespace DevCommunity2.Web
 
             services.AddTransient<IEventRepository, EventRepository>();
             services.AddTransient<IAccountRepository, AccountRepository>();
+            services.AddTransient<IFeedRepository, FeedRepository>();
+            services.AddTransient<IPublishAccountRepository, PublishAccountRepository>();
+
 
             services.AddTransient<BaseManager>();
             services.AddTransient<ApplicationUserManager>();

@@ -9,5 +9,6 @@ namespace PAP.Business.Repositories
     public interface IAccountRepository
     {
         void UpdateData(User user);
+        AccountViewModel GetUserInfo(Guid UserId);
     }
 }
