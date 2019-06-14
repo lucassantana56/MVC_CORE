@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using PAP.DataBase;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace PAP.Business.ViewModels
+namespace PAP.Business.ViewModels.Event
 {
-    public class FeedPostViewModel
+    public class EventPostViewModel
     {
         public string TextOnPublish { get; set; }
         public string Path { get; set; }
@@ -16,8 +13,5 @@ namespace PAP.Business.ViewModels
         public string FileName { get; set; }
 
         public Guid UserId { get; set; }
-
-
-
     }
 }

@@ -8,8 +8,12 @@ namespace PAP.Business.Repositories
 {
     public interface IPublishAccountRepository
     {
-        void AccountPublish(FeedPostViewModel accountPublish,Guid userId);
+        void AddAccountPublish(FeedPostViewModel accountPublish,Guid userId);
 
         IEnumerable<FeedIndexViewModel> GetAccountPublishes();
+
+        void AddFeedBack(FeedIndexFeedBackViewModel FeedBack, Guid UserId);
+
+        IEnumerable<FeedIndexFeedBackViewModel> GetAccountPublishFeedBack(int AccountPublishId);
     }
 }

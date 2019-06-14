@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using PAP.Business.Managers;
 using PAP.Business.Persistence.Repositories;
 using PAP.Business.Repositories;
 using PAP.DataBase.Auth;
@@ -20,6 +21,7 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly IAccountRepository _AccountRepository;
+
 
         public IndexModel(
             UserManager<User> userManager,
@@ -120,7 +122,7 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            _AccountRepository.UpdateData(user);
+           // _AccountRepository.UpdateData();
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

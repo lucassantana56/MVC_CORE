@@ -18,7 +18,7 @@ namespace PAP.Business.Persistence.Repositories
             _context = context;
         }
 
-        public void AccountPublish(FeedPostViewModel feedPost, Guid userId)
+        public void AddAccountPublish(FeedPostViewModel feedPost, Guid userId)
         {
             var AccountPublish = new AccountPublish()
             {
@@ -36,40 +36,59 @@ namespace PAP.Business.Persistence.Repositories
 
             _context.ContentPublishAccount.Add(contentPublishAccount);
 
-
-            if (feedPost.PhotoBytes != null)
+            var photoContentPublishAccount = new PhotoContentPublishAccount()
             {
-
-                if (feedPost.ContentType.Contains("image"))
-                {
-                    string path = @"C:\Users\Admin\source\repos\PAP_Lucas\PAP.Business\Images\PublishAccountPhotos\" + feedPost.FileName;
-                    FileInfo fileInfo = new FileInfo(path);
-
-                    using (var stream = new FileStream(fileInfo.ToString(), FileMode.Create))
-                    {
-                        stream.Write(feedPost.PhotoBytes, 0, feedPost.PhotoBytes.Length);
-                        stream.Seek(0, SeekOrigin.Begin);
-                    }
-
-                    var photoContentPublishAccount = new PhotoContentPublishAccount()
-                    {
-                        ContentPublishAccountId = contentPublishAccount.ContentPublishAccountId,
-                        PhotoURl = path
-                    };
-                    _context.PhotoContentPublishAccount.Add(photoContentPublishAccount);
-                }
-
-            }
+                ContentPublishAccountId = contentPublishAccount.ContentPublishAccountId,
+                PhotoURl = feedPost.Path
+            };
+            _context.PhotoContentPublishAccount.Add(photoContentPublishAccount);
         }
 
         public IEnumerable<FeedIndexViewModel> GetAccountPublishes()
         {
-            var accountpublish = _context.AccountPublish.Select(E => new FeedIndexViewModel()
-            {
-                
-                TextOnPublish = E.ContentPublishAccounts.TextContent
-            }).ToList();
+            var accountpublish = (from ap in _context.AccountPublish
+                                  let ac = ap.Account
+                                  let cpa = ap.ContentPublishAccounts
+                                  let pcpa = cpa.PhotoContentPublishAccounts
+                                  select new FeedIndexViewModel()
+                                  {
+                                      ContentPublishId = cpa.ContentPublishAccountId,
+                                      AccountPunlishId = ap.AccountPublishId,
+                                      TextOnPublish = cpa.TextContent,
+                                      UserNick = ac.NickName,
+                                      UserPublishPhoto = ac.PhotoUrl,
+                                      PhotoPath = pcpa.FirstOrDefault().PhotoURl
+                                  }).ToList();
             return accountpublish;
+        }
+
+        public IEnumerable<FeedIndexFeedBackViewModel> GetAccountPublishFeedBack(int AccountPublishId)
+        {           
+            var FeedAccountPublishFeedBack = from AP in _context.AccountPublish
+                                             join CP in _context.ContentPublishAccount
+                                             on AP.AccountPublishId equals CP.AccountPublishId
+                                             join FBCA in _context.FeedBackContentAccount
+                                             on AP.AccountPublishId equals FBCA.AccountPublishId
+                                             where AP.AccountPublishId == AccountPublishId
+                                             select new FeedIndexFeedBackViewModel()
+                                             {                                               
+                                                 FeedBackText = FBCA.Description
+                                             };
+
+            return FeedAccountPublishFeedBack;
+
+        }
+
+
+        public void AddFeedBack(FeedIndexFeedBackViewModel FeedBack, Guid UserId )
+        {
+            var accountPublishFeedBack = new FeedBackContentAccount()
+            {
+                AccountId = UserId,
+                AccountPublishId = FeedBack.AccountPublishId,
+                Description = FeedBack.FeedBackText
+            };
+            _context.FeedBackContentAccount.AddAsync(accountPublishFeedBack);
         }
     }
 }

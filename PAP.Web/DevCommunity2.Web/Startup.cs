@@ -13,7 +13,8 @@ using PAP.Business.Managers;
 using PAP.DataBase.Auth;
 using PAP.Business.Repositories;
 using PAP.Business.Persistence.Repositories;
-using PAP.Business;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace DevCommunity2.Web
 {
@@ -35,6 +36,11 @@ namespace DevCommunity2.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            services.AddSingleton<IFileProvider>(
+                new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
+
             services.AddDbContext<ApplicationDatabaseContext>(options => options.UseSqlServer(
                 Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("DevCommunity2.Web")));
 
@@ -80,9 +86,8 @@ namespace DevCommunity2.Web
 
             services.AddTransient<IEventRepository, EventRepository>();
             services.AddTransient<IAccountRepository, AccountRepository>();
-            services.AddTransient<IFeedRepository, FeedRepository>();
             services.AddTransient<IPublishAccountRepository, PublishAccountRepository>();
-
+            services.AddTransient<IPublishEventRepository, PublishEventRepository>();
 
             services.AddTransient<BaseManager>();
             services.AddTransient<ApplicationUserManager>();

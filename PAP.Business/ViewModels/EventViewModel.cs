@@ -15,6 +15,7 @@ namespace PAP.Business.ViewModels
         public string  PhotoUrl { get; set; }
         public int Stars { get; set; }
         public string  Description { get; set; }
-   
+        public DateTime  DateCreated { get; set; }
+
     }
 }

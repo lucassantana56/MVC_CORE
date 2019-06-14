@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html> 
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -14,9 +14,9 @@
         <link href="~/css/Feed.css" rel="stylesheet" />
     </environment>
 </head>
-<body> 
+<body>
     <nav class="navbar navbar-dark bg-primary">
-        <a class="navbar-brand" href="#">tsts</a>
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DevCommunity</a>
         <form class="form-inline">
             <input type="text" class="form-control" placeholder="Search">
             <div class="input-group-btn">
@@ -25,19 +25,34 @@
                 </button>
             </div>
             <i class="fas fa-bell fa-lg"></i>
-            <img id=""  src="" class="rounded float-right user-photo" style="height:50px;padding-left:12px;" />
+            <button asp-action="Index" asp-controller="Event" class="btn btn-default">
+                <i class="fas fa-calendar fa-lg" aria-hidden="true"></i>
+            </button>
+            <label id="UserName"></label>
+            <img src="~/Images/UserPhotos/DefaultUserPhoto.png" class="d-flex rounded-circle avatar z-depth-1-half mr-3" style="height:50px;padding-left:12px;" />
         </form>
     </nav>
 
     <div class="container">
         @RenderBody()
     </div>
-    <script>
+    <script>    
         $(function () {
-            $.get("@Url.Action("GetUserPhoto","User")", (data) => {
-                $(".user-photo").attr("src", data);
-            });
-        });
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetUserPhoto","User")",
+                contentType: "application/json; charset=utf-8",  
+                dataType: "json",
+                success: function (response) {
+                    if (response != null) {
+                        $(".user-photo").attr("src", response);
+                    }
+                    else {
+                          $(".user-photo").attr("src","~/Images/UserPhotos/DefaultUserPhoto.png" );
+                    }
+                }
+            })
+        })
     </script>
 </body>
 </html>

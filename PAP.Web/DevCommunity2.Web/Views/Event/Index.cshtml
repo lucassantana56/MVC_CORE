@@ -7,42 +7,27 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.EventName)
-        </th>
-        
-        <th>
-            @Html.DisplayNameFor(model => model.EventDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TypeOfEvent)
-        </th>
-    </tr>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventName)
-            </td>     
-            <td>
-                @Html.DisplayFor(modelItem => item.EventDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TypeOfEvent)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location)
-            </td>        
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.EventId }) |
+@foreach (var item in Model)
+{
+    <br />
+    <div class="card">
+        <div class="card text-center">
+            <div class="card-header">
+                <a asp-controller="EventFeed" asp-action="Index">  @item.EventName</a>
+            </div>
+            <div class="card-body">
+                <p class="card-text">@item.TypeOfEvent</p>
+                <p class="card-text">@item.Description</p>                  
+                @Html.ActionLink("Edit", "Edit", new { @class = "btn btn-primary", id = item.EventId }) |
                 @Html.ActionLink("Details", "Details", new { id = item.EventId }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.EventId })
-            </td>
-        </tr>
-    }
-
-</table>
+            </div>
+            <div class="card-footer text-muted">
+                Created on : @item.DateCreated
+            </div>
+        </div>
+    </div>
+    
+}
 

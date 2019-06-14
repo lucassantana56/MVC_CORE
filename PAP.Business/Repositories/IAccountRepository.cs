@@ -1,4 +1,5 @@
 ﻿using PAP.Business.ViewModels;
+using PAP.Business.ViewModels.Account;
 using PAP.DataBase.Auth;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,8 @@ namespace PAP.Business.Repositories
 {
     public interface IAccountRepository
     {
-        void UpdateData(User user);
-        AccountViewModel GetUserInfo(Guid UserId);
+        void UpdateData(AccountDataViewModel user, Guid UserId);
+
+        AccountInfoViewModel GetUserInfo(Guid UserId);
     }
 }

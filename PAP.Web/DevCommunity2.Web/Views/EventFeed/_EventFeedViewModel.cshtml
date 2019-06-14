@@ -1,0 +1,11 @@
+﻿@model FeedIndexViewModel
+<br />
+<li class="list-group-item" style="padding-top:2px; padding-left:5px;">
+    @{
+        var UserPublishPhoto = System.IO.Path.GetPathRoot(Model.UserPublishPhoto);
+    }
+    <img src="@Url.Content(UserPublishPhoto)">
+    <label>@Model.UserNick</label>
+    <label class="form-control"> @Model.TextOnPublish</label>
+    <img src="@Model.PhotoPath.ToString().Replace("//","/")" class="img-fluid" alt="Responsive image">
+</li>

@@ -1,27 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PAP.Business.Managers;
 using PAP.Business.Persistence.Repositories;
 using PAP.Business.Repositories;
 using PAP.Business.ViewModels;
+
 namespace DevCommunity2.Web.Controllers
 {
     public class FeedController : Controller
     {
         private readonly PublishAccountRepository _PublishAccountRepo;
         private readonly BaseManager _BaseManager;
+        private readonly HostingEnvironment _hostingEnvironment;
 
-        public FeedController(IPublishAccountRepository PublishAccountRepo, BaseManager baseManager)
+        public FeedController(IPublishAccountRepository PublishAccountRepo, BaseManager baseManager, IHostingEnvironment hostingEnvironment)
         {
             _PublishAccountRepo = (PublishAccountRepository)PublishAccountRepo;
-            _BaseManager = (BaseManager)baseManager;
+            _BaseManager = baseManager;
+            _hostingEnvironment = (HostingEnvironment)hostingEnvironment;
         }
+
+        [HttpPost]
+        public ActionResult FeedBackAccountIndex(int AccountPublishId)
+        {
+            var result = _PublishAccountRepo.GetAccountPublishFeedBack(AccountPublishId);
+            if (result != null)
+            {
+                return View(result);
+            }
+            else
+            {
+                return View();
+            }
+        }
+
 
         // GET: Feed
         public ActionResult Index()
@@ -39,34 +58,66 @@ namespace DevCommunity2.Web.Controllers
         // POST: Feed/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(FeedPostViewModel FeedPost, IFormFile File)
+        public async Task<JsonResult> Create(FeedPostViewModel FeedPost, IFormFile File)
         {
-            if (File != null)
+            try
             {
-                FeedPost.FileName = File.FileName;
-                FeedPost.ContentType = File.ContentType;
 
-                using (var ms = new MemoryStream())
+                var uploadFolder = Path.Combine(
+                    _hostingEnvironment.WebRootPath, "Images", "AccountPublish");
+                var uniqueFileName = Guid.NewGuid() + File.FileName;
+
+                var path = Path.Combine(uploadFolder, uniqueFileName);
+
+
+                using (var stream = new FileStream(path, FileMode.Create))
                 {
-                    File.CopyTo(ms);
-                    FeedPost.PhotoBytes = ms.ToArray();
+                    await File.CopyToAsync(stream);
                 }
+
+
+                Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
+
+                string pic = System.IO.Path.GetFileName(File.FileName);
+
+                FeedPost.Path = uniqueFileName;
+
+                _PublishAccountRepo.AddAccountPublish(FeedPost, userId);
+                _BaseManager.SaveChanges();
+
+                return Json(new { success = true, message = "sucess" });
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "erro" });
+                throw;
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult CreateFeedBack(FeedIndexFeedBackViewModel FeedBack)
+        {
+            Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
+
+            if (userId == null)
+            {
+                return Json(new { success = false, message = "erro" });
             }
 
             try
             {
-                Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
-                 _PublishAccountRepo.AccountPublish(FeedPost, userId);
+                _PublishAccountRepo.AddFeedBack(FeedBack, userId);
                 _BaseManager.SaveChanges();
-
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "sucess" });
             }
-            catch
+            catch (Exception)
             {
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = false, message = "erro" });
+                throw;
             }
         }
-
         // GET: Feed/Edit/5
         public ActionResult Edit(int id)
         {

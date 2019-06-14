@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace DevCommunity2.Web.Controllers
         {
             _accountRepository = (AccountRepository)accountRepo;
         }
-
+        [HttpGet]
         public IActionResult GetUserPhoto()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
@@ -36,8 +37,25 @@ namespace DevCommunity2.Web.Controllers
             {
                 return BadRequest();
             }
+            string userPhoto = "~/Images/UserPhotos/" + user.PhotoUrl;
+            return Json(userPhoto);
+        }
 
-            return Ok(user.PhotoUrl);
+        public IActionResult GetNickName()
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest();
+            }
+
+            var user = _accountRepository.GetUserInfo(new Guid(userId));
+
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            return Ok(user.Nickname);
         }
     }
 }

@@ -38,6 +38,8 @@ namespace PAP.Business.Persistence.Repositories
         {
             var @event = _context.Event.Select(e => new EventViewModel()
             {
+                DateCreated = e.DateCreated,
+                Description = e.Description,
                 EventId = e.EventId,
                 EventName = e.NameEvent,
                 EventDate = e.DateEvent,

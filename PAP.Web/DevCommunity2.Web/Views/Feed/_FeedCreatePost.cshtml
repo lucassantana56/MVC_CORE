@@ -1,14 +1,51 @@
 ﻿@model FeedPostViewModel
-    <form asp-action="Create" enctype="multipart/form-data" >
-        <ul class="list-group" style="border:none">
-            <li class="list-group-item" style="padding-top:2px; padding-left:5px;">
-                <img src="" class="rounded float-left user-photo">
-                <label></label>
-               @Html.TextAreaFor(Model => Model.TextOnPublish ,htmlAttributes: new { @class ="form-control z-depth-1"})
-            </li>
-            <li class="btn btn-primary btn-sm float-left">
-                <input type="file" name="File" class="btn btn-primary btn-sm float-left">
-                <input type="submit" value="Create" class="btn btn-success float-right" />
-            </li>
-        </ul>
-    </form>
+<form  method="post" enctype="multipart/form-data" onsubmit="return FeedCreate(this)">
+    <ul class="list-group" style="border:none">
+        <li class="list-group-item">
+            <div class="media mt-3 shadow-textarea">
+                <img class="d-flex rounded-circle avatar z-depth-1-half mr-3" src="~/Images/UserPhotos/DefaultUserPhoto.png"
+                     alt="User Phto">
+                <div class="media-body">
+                    <h5 class="mt-0 font-weight-bold blue-text">User Name</h5>
+                    <div class="form-group basic-textarea rounded-corners">
+                        <textarea asp-for="TextOnPublish" class="form-control z-depth-1" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li class="btn btn-primary btn-sm float-left">
+            <input type="file" name="File" class="btn btn-primary btn-sm float-left">
+            <input type="submit" value="Create" class="btn btn-success float-right" />
+        </li>
+    </ul>
+</form>
+<style>
+     .avatar {
+        width: 64px;
+    }
+</style>
+<script>
+    function FeedCreate(form) {
+        $.validator.unobtrusive.parse(form);
+        if ($(form).valid()) {
+            var ajaxConfig = {
+                type: 'POST',
+                url: @Url.Action("Create","Feed"),
+                data: new FormData(form),
+                success: function (response) {
+                    if (response.success) {
+                        $.notify(response.message, "sucess");
+                    }
+                    else {
+                        $.notify(response.message, "error");
+                    }
+                }
+            }
+            if ($(form).attr('enctype') == "multipart/form-data") {
+                ajaxConfig["contentType"] = false;
+                ajaxConfig["processData"] = false;
+            }
+            $.ajax(ajaxConfig)
+        }
+    }
+</script>
