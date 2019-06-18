@@ -4,41 +4,83 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="card">
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-route-returnUrl="@Model.ReturnUrl" enctype="multipart/form-data" method="post">
-            <h4>Create a new account.</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Input.NickName"></label>
-                <input asp-for="Input.NickName" class="form-control" />
-                <span asp-validation-for="Input.NickName" class="text-danger"></span>
+    <h5 class="card-header info-color white-text text-center py-4">
+        <strong>Sign up</strong>
+    </h5>
+
+    <!--Card content-->
+    <div class="card-body px-lg-5 pt-0">
+
+        <!-- Form -->
+        <form asp-route-returnUrl="@Model.ReturnUrl" enctype="multipart/form-data" method="post" class="text-center" style="color: #757575;">
+
+            <div class="form-row">
+                <div class="col">
+                    <!-- First name -->
+                    <div class="md-form">
+                        <input type="text" id="materialRegisterFormFirstName" asp-for="Input.NickName" class="form-control">
+                        <label for="materialRegisterFormFirstName">NickName</label>
+                        <span asp-validation-for="Input.NickName" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" />
+
+            <!-- E-mail -->
+            <div class="md-form mt-0">
+                <input type="email" id="materialRegisterFormEmail" asp-for="Input.Email" class="form-control">
+                <label for="materialRegisterFormEmail">E-mail</label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" />
+
+            <!-- Password -->
+            <div class="md-form">
+                <input type="password" id="materialRegisterFormPassword" asp-for="Input.Password" class="form-control" aria-describedby="materialRegisterFormPasswordHelpBlock">
+                <label for="materialRegisterFormPassword">Password</label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.ConfirmPassword"></label>
-                <input asp-for="Input.ConfirmPassword" class="form-control" />
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+
+            <div class="file-field">
+                <div class="mb-4">
+                    <img src="~/Images/UserPhotos/DefaultUserPhoto.png"
+                         class="rounded-circle z-depth-1-half avatar-pic" width="50px;" alt="example placeholder avatar">
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="btn btn-mdb-color btn-rounded float-left">
+                        <span>Add photo</span>
+                        <input type="file" asp-for="Input.Photo">
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.Photo"></label>
-                <input asp-for="Input.Photo" class="form-control" />
-            </div>
-            <button type="submit" class="btn btn-primary">Register</button>
+           
+            <!-- Sign up button -->
+            <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">Register</button>
+            <hr>
         </form>
+            <!-- Social register -->
+            <p>or sign up with:</p>
+
+            @{
+
+                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                    <div>
+                        <p>
+                            @foreach (var provider in Model.ExternalLogins)
+                            {
+                                <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                            }
+                        </p>
+                    </div>
+                </form>
+
+            }
+
+
+           
+
     </div>
+
 </div>
 
 @section Scripts {

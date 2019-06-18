@@ -16,6 +16,9 @@ using PAP.Business.Repositories;
 using PAP.DataBase.Auth;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authentication;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DevCommunity2.Web.Areas.Identity.Pages.Account
 {
@@ -52,6 +55,8 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account
         [BindProperty]
         public InputModel Input { get; set; }
 
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+
         public string ReturnUrl { get; set; }
 
         public class InputModel
@@ -80,8 +85,12 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account
             public IFormFile Photo { get; set; }
         }
 
-        public void OnGet(string returnUrl = null)
+        public async Task OnGetAsync(string returnUrl = null)
         {
+            // Clear the existing external cookie to ensure a clean login process
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             ReturnUrl = returnUrl;
         }
 
