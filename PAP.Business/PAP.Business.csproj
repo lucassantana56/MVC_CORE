@@ -18,4 +18,8 @@
     <ProjectReference Include="..\PAP.DataBase\PAP.DataBase.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Images\PublishAccountPhotos\" />
+  </ItemGroup>
+
 </Project>

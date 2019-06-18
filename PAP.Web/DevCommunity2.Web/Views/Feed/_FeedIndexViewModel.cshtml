@@ -1,0 +1,19 @@
+﻿@model FeedIndexViewModel
+<br />
+<li class="list-group-item" style="padding-top:2px; padding-left:5px;">
+    <div class="row">
+        <div class="col-md-1">
+            <img src="~/Images/UserPhotos/df95ba39-98e0-4822-b105-6f1e854644e1download.jpg" class="rounded-circle avatar z-depth-1-half mr-3">
+        </div>
+        <div class="col-md-11">
+            <p>
+                <a class="float-left"><strong> @Model.UserNick</strong></a>
+            </p>
+            <div class="clearfix"></div>
+            <p>@Model.TextOnPublish</p>
+            <img src="~/Images/AccountPublish/@Model.PhotoPath"  class="img-fluid rounded mx-auto d-block" />
+        </div>
+    </div>
+</li>
+
+

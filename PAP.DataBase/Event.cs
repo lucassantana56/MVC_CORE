@@ -24,6 +24,8 @@ namespace PAP.DataBase
 
         public string LocationWhat3words { get; set; }
 
+        public string Location { get; set; }
+
         [StringLength(500)]
         public string PhotoUrl { get; set; }
 
@@ -31,6 +33,8 @@ namespace PAP.DataBase
         public string Description { get; set; }
         [Required]
         public int Stars { get; set; }
+
+        public bool  IsEnabled { get; set; }
 
         [InverseProperty(nameof(AccountNotification.Event))]
         public virtual ICollection<AccountNotification> AccountNotifications { get; set; }
