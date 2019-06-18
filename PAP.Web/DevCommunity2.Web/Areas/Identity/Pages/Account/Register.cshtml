@@ -20,8 +20,7 @@
                 <div class="col">
                     <!-- First name -->
                     <div class="md-form">
-                        <input type="text" id="materialRegisterFormFirstName" asp-for="Input.NickName" class="form-control">
-                        <label for="materialRegisterFormFirstName">NickName</label>
+                        <input type="text" id="materialRegisterFormFirstName" asp-for="Input.NickName" placeholder="NickName" class="form-control">                 
                         <span asp-validation-for="Input.NickName" class="text-danger"></span>
                     </div>
                 </div>
@@ -29,15 +28,13 @@
 
             <!-- E-mail -->
             <div class="md-form mt-0">
-                <input type="email" id="materialRegisterFormEmail" asp-for="Input.Email" class="form-control">
-                <label for="materialRegisterFormEmail">E-mail</label>
+                <input type="email" id="materialRegisterFormEmail" asp-for="Input.Email" placeholder="E-mail" class="form-control">              
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
 
             <!-- Password -->
             <div class="md-form">
-                <input type="password" id="materialRegisterFormPassword" asp-for="Input.Password" class="form-control" aria-describedby="materialRegisterFormPasswordHelpBlock">
-                <label for="materialRegisterFormPassword">Password</label>
+                <input type="password" id="materialRegisterFormPassword" asp-for="Input.Password" class="form-control" aria-describedby="materialRegisterFormPasswordHelpBlock" placeholder="Password">              
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
 

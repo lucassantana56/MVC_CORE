@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <environment include="Development">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">      
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
         <script src="~/bundles/jquery"></script>
         <script src="~/bundles/jqueryval"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -24,29 +24,34 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-sm  navbar-toggleable-sm navbar-dark bg-primary">
         <a class="navbar-brand" asp-area="" asp-controller="Feed" asp-action="Index">DevCommunity</a>
-        <form class="form-inline">                             
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
             <div id="ex4">
                 <span class="p1 fa-stack fa-2x has-badge" data-count="4">
                     <a href="@Url.Action("Index","Event")">
                         <i class="p3 fa fa-calendar fa-stack-1x xfa-inverse" data-count="4b"></i>
                     </a>
                 </span>
-            </div>             
+            </div>
             <img src="~/Images/UserPhotos/DefaultUserPhoto.png" class="user-photo d-flex rounded-circle avatar  mr-3" style="height:50px;padding-left:12px;" />
-        </form>
+        </div>
     </nav>
 
     <div class="container">
         @RenderBody()
     </div>
-    <script>    
+    <script>
+
         $(function () {
             $.ajax({
                 type: "POST",
                 url: "@Url.Action("GetUserPhoto","User")",
-                contentType: "application/json; charset=utf-8",  
+                contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
                     if (response != null) {
@@ -63,7 +68,7 @@
             $.ajax({
                 type: "POST",
                 url: "@Url.Action("GetNickName","User")",
-                contentType: "application/json; charset=utf-8",  
+                contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
                     if (response != null) {
@@ -76,6 +81,6 @@
             })
         })
     </script>
-    @RenderSection("ScriptsAuth",required:false)
+    @RenderSection("ScriptsAuth", required: false)
 </body>
 </html>
