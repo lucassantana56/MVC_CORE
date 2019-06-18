@@ -69,7 +69,7 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl = returnUrl ?? Url.Content("~/Feed/Index");
 
             if (ModelState.IsValid)
             {

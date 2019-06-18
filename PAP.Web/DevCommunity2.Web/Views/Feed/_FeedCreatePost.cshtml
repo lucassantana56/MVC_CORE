@@ -1,12 +1,14 @@
 ﻿@model FeedPostViewModel
-<form  method="post" enctype="multipart/form-data" onsubmit="return FeedCreate(this)">
+
+<form id="FeedCreate" asp-action="Create" asp-controller="Feed" data-ajax="true"
+      data-ajax-method="post" enctype="multipart/form-data">
     <ul class="list-group" style="border:none">
         <li class="list-group-item">
             <div class="media mt-3 shadow-textarea">
-                <img class="d-flex rounded-circle avatar z-depth-1-half mr-3" src="~/Images/UserPhotos/DefaultUserPhoto.png"
+                <img class="user-photo d-flex rounded-circle avatar z-depth-1-half mr-3" src="/Images/UserPhotos/DefaultUserPhoto.png"
                      alt="User Phto">
                 <div class="media-body">
-                    <h5 class="mt-0 font-weight-bold blue-text">User Name</h5>
+                    <h5 class="nick-name mt-0 font-weight-bold blue-text">User Name</h5>
                     <div class="form-group basic-textarea rounded-corners">
                         <textarea asp-for="TextOnPublish" class="form-control z-depth-1" rows="3"></textarea>
                     </div>
@@ -24,28 +26,4 @@
         width: 64px;
     }
 </style>
-<script>
-    function FeedCreate(form) {
-        $.validator.unobtrusive.parse(form);
-        if ($(form).valid()) {
-            var ajaxConfig = {
-                type: 'POST',
-                url: @Url.Action("Create","Feed"),
-                data: new FormData(form),
-                success: function (response) {
-                    if (response.success) {
-                        $.notify(response.message, "sucess");
-                    }
-                    else {
-                        $.notify(response.message, "error");
-                    }
-                }
-            }
-            if ($(form).attr('enctype') == "multipart/form-data") {
-                ajaxConfig["contentType"] = false;
-                ajaxConfig["processData"] = false;
-            }
-            $.ajax(ajaxConfig)
-        }
-    }
-</script>
+

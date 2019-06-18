@@ -1,11 +1,11 @@
 ﻿@model FeedIndexFeedBackViewModel
-<form id="formFeedBack" method="post" onsubmit="return FeedCreateFeedback(this)">
+<form id="formFeedBack" method="post" asp-action="CreateFeedBack"  asp-controller="Feed" onsubmit="return FeedCreateFeedback(this)">
     <div class="list-group-item">
         <div class="media mt-3 shadow-textarea">
-            <img class="d-flex rounded-circle avatar z-depth-1-half mr-3" src="~/Images/UserPhotos/DefaultUserPhoto.png"
+            <img class="user-photo d-flex rounded-circle avatar z-depth-1-half mr-3" src="~/Images/UserPhotos/DefaultUserPhoto.png"
                  alt="User Phto">
             <div class="media-body">
-                <h5 class="mt-0 font-weight-bold blue-text">User Name</h5>
+                <h5 class="nick-name mt-0 font-weight-bold blue-text">User Name</h5>
                 <div class="form-group basic-textarea rounded-corners">
                     <textarea id="feedbacktext" asp-for="FeedBackText" class="form-control z-depth-1" rows="3" style="font-weight: 300;" placeholder="Write your comment..."></textarea>
                 </div>
@@ -23,38 +23,3 @@
     }
 </style>
 
-@*<script type="text/javascript">
-
-        var input = document.getElementById("feedbacktext");
-
-    // Execute a function when the user releases a key on the keyboard
-    input.addEventListener("keyup", function(event) {
-      // Number 13 is the "Enter" key on the keyboard
-      if (event.keyCode === 13) {
-        // Cancel the default action, if needed
-        event.preventDefault();
-        // Trigger the button element with a click
-        document.getElementById("formFeedBack").submit();
-      }
-    });
-
-         function FeedCreateFeedback(form) {
-            $.validator.unobtrusive.parse(form);
-            if ($(form).valid()) {
-                var ajaxConfig = {
-                    type: 'POST',
-                    url: @Url.Action("Create"),
-                    data: new FormData(form),
-                    success: function (response) {
-                        if (response.success) {
-                            $.notify(response.message, "sucess");
-                        }
-                        else {
-                            $.notify(response.message, "error");
-                        }
-                    }
-                }
-                $.ajax(ajaxConfig)
-            }
-        }
-    </script>*@

@@ -4,32 +4,37 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <environment include="Development">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">      
         <script src="~/bundles/jquery"></script>
         <script src="~/bundles/jqueryval"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Material Design Bootstrap -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.2/css/mdb.min.css" rel="stylesheet">
+        <!-- JQuery -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!-- Bootstrap tooltips -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+        <!-- Bootstrap core JavaScript -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <!-- MDB core JavaScript -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.2/js/mdb.min.js"></script>
         <link rel="stylesheet" href="~/css/LayoutAuth.css" />
-        <link href="~/css/Feed.css" rel="stylesheet" />
     </environment>
 </head>
 <body>
     <nav class="navbar navbar-dark bg-primary">
-        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DevCommunity</a>
-        <form class="form-inline">
-            <input type="text" class="form-control" placeholder="Search">
-            <div class="input-group-btn">
-                <button class="btn btn-default" type="submit">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
-            <i class="fas fa-bell fa-lg"></i>
-            <button asp-action="Index" asp-controller="Event" class="btn btn-default">
-                <i class="fas fa-calendar fa-lg" aria-hidden="true"></i>
-            </button>
-            <label id="UserName"></label>
-            <img src="~/Images/UserPhotos/DefaultUserPhoto.png" class="d-flex rounded-circle avatar z-depth-1-half mr-3" style="height:50px;padding-left:12px;" />
+        <a class="navbar-brand" asp-area="" asp-controller="Feed" asp-action="Index">DevCommunity</a>
+        <form class="form-inline">                             
+            <div id="ex4">
+                <span class="p1 fa-stack fa-2x has-badge" data-count="4">
+                    <a href="@Url.Action("Index","Event")">
+                        <i class="p3 fa fa-calendar fa-stack-1x xfa-inverse" data-count="4b"></i>
+                    </a>
+                </span>
+            </div>             
+            <img src="~/Images/UserPhotos/DefaultUserPhoto.png" class="user-photo d-flex rounded-circle avatar  mr-3" style="height:50px;padding-left:12px;" />
         </form>
     </nav>
 
@@ -53,6 +58,24 @@
                 }
             })
         })
+
+            $(function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetNickName","User")",
+                contentType: "application/json; charset=utf-8",  
+                dataType: "json",
+                success: function (response) {
+                    if (response != null) {
+                        $(".nick-name").text(response);
+                    }
+                    else {
+                        $(".nick-name").text("User Name");
+                    }
+                }
+            })
+        })
     </script>
+    @RenderSection("ScriptsAuth",required:false)
 </body>
 </html>

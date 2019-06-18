@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DevCommunity2.Web.Migrations
 {
-    public partial class mig1 : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -65,9 +65,11 @@ namespace DevCommunity2.Web.Migrations
                     DateEvent = table.Column<DateTime>(nullable: false),
                     TypeOfEvent = table.Column<string>(maxLength: 20, nullable: true),
                     LocationWhat3words = table.Column<string>(nullable: true),
+                    Location = table.Column<string>(nullable: true),
                     PhotoUrl = table.Column<string>(maxLength: 500, nullable: true),
                     Description = table.Column<string>(maxLength: 500, nullable: true),
-                    Stars = table.Column<int>(nullable: false, defaultValue: 3)
+                    Stars = table.Column<int>(nullable: false, defaultValue: 3),
+                    IsEnabled = table.Column<bool>(nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {

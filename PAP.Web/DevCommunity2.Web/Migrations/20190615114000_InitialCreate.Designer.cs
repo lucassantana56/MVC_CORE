@@ -10,8 +10,8 @@ using PAP.Business.DbContext;
 namespace DevCommunity2.Web.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    [Migration("20190510173045_mg3")]
-    partial class mg3
+    [Migration("20190615114000_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -51,7 +51,18 @@ namespace DevCommunity2.Web
                 .AddUserManager<ApplicationUserManager>()
                 .AddSignInManager<ApplicatonSignInManager>()
                 .AddEntityFrameworkStores<ApplicationDatabaseContext>();
-              
+
+            services.AddAuthentication()
+                .AddFacebook(facebookOptions =>
+                {
+                    facebookOptions.AppId = "451240372332983";
+                    facebookOptions.AppSecret = "c31cb56e88d62c3687388b228e028299";
+                })                 
+                .AddGoogle(googleOptions => {
+                    googleOptions.ClientId = "256612312408-9qbfilnst4hejssitaqkdv2p8744oisv.apps.googleusercontent.com";
+                    googleOptions.ClientSecret = "yPYXlDIPEbAwwwpERncZNjKD";
+                });
+
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,7 @@ using PAP.Business.ViewModels;
 
 namespace DevCommunity2.Web.Controllers
 {
+    [Authorize]
     public class FeedController : Controller
     {
         private readonly PublishAccountRepository _PublishAccountRepo;

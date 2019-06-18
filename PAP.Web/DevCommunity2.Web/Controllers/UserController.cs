@@ -22,40 +22,42 @@ namespace DevCommunity2.Web.Controllers
         {
             _accountRepository = (AccountRepository)accountRepo;
         }
-        [HttpGet]
-        public IActionResult GetUserPhoto()
+
+        [HttpPost]
+        public JsonResult GetUserPhoto()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             if (string.IsNullOrEmpty(userId))
             {
-                return BadRequest();
+                return Json("ERRO");
             }
 
             var user = _accountRepository.GetUserInfo(new Guid(userId));
 
             if (user == null)
             {
-                return BadRequest();
+                return Json("ERRO");
             }
-            string userPhoto = "~/Images/UserPhotos/" + user.PhotoUrl;
+            string userPhoto = "/Images/UserPhotos/" + user.PhotoUrl;
             return Json(userPhoto);
         }
 
-        public IActionResult GetNickName()
+        [HttpPost]
+        public JsonResult GetNickName()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             if (string.IsNullOrEmpty(userId))
             {
-                return BadRequest();
+                return Json("Bad Request");
             }
 
             var user = _accountRepository.GetUserInfo(new Guid(userId));
 
             if (user == null)
             {
-                return BadRequest();
+                return Json("Bad Request");
             }
-            return Ok(user.Nickname);
+            return Json(user.Nickname);
         }
     }
 }
