@@ -21,32 +21,18 @@ namespace DevCommunity2.Web.Controllers
         private readonly PublishAccountRepository _PublishAccountRepo;
         private readonly BaseManager _BaseManager;
         private readonly HostingEnvironment _hostingEnvironment;
+    
 
         public FeedController(IPublishAccountRepository PublishAccountRepo, BaseManager baseManager, IHostingEnvironment hostingEnvironment)
         {
             _PublishAccountRepo = (PublishAccountRepository)PublishAccountRepo;
             _BaseManager = baseManager;
             _hostingEnvironment = (HostingEnvironment)hostingEnvironment;
-        }
-
-        [HttpPost]
-        public ActionResult FeedBackAccountIndex(int AccountPublishId)
-        {
-            var result = _PublishAccountRepo.GetAccountPublishFeedBack(AccountPublishId);
-            if (result != null)
-            {
-                return View(result);
-            }
-            else
-            {
-                return View();
-            }
-        }
-
-
+        }     
         // GET: Feed
         public ActionResult Index()
         {
+           
             var result = _PublishAccountRepo.GetAccountPublishes().ToList();
             return View(result);
         }
@@ -60,7 +46,7 @@ namespace DevCommunity2.Web.Controllers
         // POST: Feed/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> Create(FeedPostViewModel FeedPost, IFormFile File)
+        public async Task<ActionResult> Create(FeedPostViewModel FeedPost, IFormFile File)
         {
             try
             {
@@ -96,10 +82,10 @@ namespace DevCommunity2.Web.Controllers
             }
 
         }
-
+   
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult CreateFeedBack(FeedIndexFeedBackViewModel FeedBack)
+        public ActionResult CreateFeedBack(FeedIndexViewModel feedIndexViewModel)
         {
             Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
 
@@ -108,15 +94,22 @@ namespace DevCommunity2.Web.Controllers
                 return Json(new { success = false, message = "erro" });
             }
 
+            var fifvm = new FeedIndexFeedBackViewModel()
+            {
+                AccountPublishId = feedIndexViewModel.AccountPublishId,
+                FeedBackText = feedIndexViewModel.FeedBackText
+            };
+
             try
             {
-                _PublishAccountRepo.AddFeedBack(FeedBack, userId);
+                
+                _PublishAccountRepo.AddFeedBack(fifvm, userId);
                 _BaseManager.SaveChanges();
-                return Json(new { success = true, message = "sucess" });
+                return View();
             }
             catch (Exception)
             {
-                return Json(new { success = false, message = "erro" });
+                return BadRequest();
                 throw;
             }
         }

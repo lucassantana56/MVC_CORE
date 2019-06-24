@@ -15,19 +15,35 @@ using PAP.Business.ViewModels;
 
 namespace DevCommunity2.Web.Controllers
 {
-
+    [Authorize]
     public class EventController : Controller
     {
 
         private readonly EventRepository _eventRepo;
         private readonly BaseManager _BaseManager;
 
-        public EventController(IEventRepository eventRepo,BaseManager baseManager)
+        public EventController(IEventRepository eventRepo, BaseManager baseManager)
         {
             _eventRepo = (EventRepository)eventRepo;
             _BaseManager = (BaseManager)baseManager;
         }
 
+
+        
+        [HttpGet]
+        public ActionResult JoinOnEvent(int eventId)
+        {
+            Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
+
+            if (userId == null)
+            {
+                return Json(new { sucess = false });
+            }
+
+            _eventRepo.JoinOnEvent(eventId, userId);
+
+            return Json(new { sucess = false });
+        }
 
         // GET: Event
         public ActionResult Index()
@@ -50,7 +66,7 @@ namespace DevCommunity2.Web.Controllers
         }
 
         // GET: Event/Create
-        [Authorize]
+        
         public ActionResult Create()
         {
             return View();
@@ -69,7 +85,7 @@ namespace DevCommunity2.Web.Controllers
                 //  string userid = User.
                 //Guid.TryParse(userid, out Guid usertst);
                 // TODO: Add insert logic here           
-                Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier),out Guid userId);
+                Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
                 _eventRepo.Add(@event, userId);
                 _BaseManager.SaveChanges();
                 return RedirectToAction(nameof(Index));

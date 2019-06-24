@@ -4,9 +4,10 @@
     Layout = "~/Views/Shared/LayoutAuth.cshtml";
 }
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<br />
+<form>
+    <button asp-action="Create" asp-controller="Event" class="btn btn-primary"> Create new </button>
+</form>
 
 @foreach (var item in Model)
 {
@@ -14,11 +15,15 @@
     <div class="card">
         <div class="card text-center">
             <div class="card-header">
-                <a asp-controller="EventFeed" asp-action="Index">  @item.EventName</a>
+                <a asp-controller="EventFeed" asp-action="Index">@item.EventName</a>
+                @using (Html.BeginForm("JoinOnEvent", "Event", FormMethod.Post))
+                {
+                    <button type="submit" name="btnJoinEvent" class="btn btn-primary btn-sm" style="float:right;">JOIN</button>
+                }
             </div>
             <div class="card-body">
                 <p class="card-text">@item.TypeOfEvent</p>
-                <p class="card-text">@item.Description</p>                  
+                <p class="card-text">@item.Description</p>
                 @Html.ActionLink("Edit", "Edit", new { @class = "btn btn-primary", id = item.EventId }) |
                 @Html.ActionLink("Details", "Details", new { id = item.EventId }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.EventId })
@@ -28,6 +33,5 @@
             </div>
         </div>
     </div>
-    
-}
 
+}

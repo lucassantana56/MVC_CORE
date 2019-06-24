@@ -61,19 +61,44 @@ namespace PAP.Business.Persistence.Repositories
                 Location = e.Location
             }).FirstOrDefault(e => e.UserId == userId);
             return @event;
+        }
 
+
+        public Boolean IsUserEventCreated(Guid UserId, int EventId)
+        {
+            var @event = _context.Event.Find(EventId);
+
+            if (@event != null)
+            {
+                if (@event.CreatedByUserID == UserId)
+                {
+                    return true;
+                }
+            }          
+            return false;
         }
 
         public EventViewModel GetEventsNameByUser(Guid userId)
         {
             var @event = _context.Event.Select(e => new EventViewModel()
             {        
-                EventName = e.NameEvent,
+                EventName = e.NameEvent
                 
             }).FirstOrDefault(e => e.UserId == userId);
 
             return @event;
 
+        }
+
+        public void JoinOnEvent(int EventId, Guid UserId)
+        {
+            var accountOnEvent = new AccountOnEvent()
+            {
+                AccountId = UserId,
+                EventId = EventId
+            };
+
+            _context.AccountOnEvent.Add(accountOnEvent);
         }
 
         public void Add(EventViewModel entity, Guid userId)
@@ -92,19 +117,22 @@ namespace PAP.Business.Persistence.Repositories
                 NameEvent = entity.EventName,
                 PhotoUrl = entity.PhotoUrl,
                 TypeOfEvent = entity.TypeOfEvent,
+                CreatedByUserID = userId
+                
             };
 
             _context.Event.Add(@event);
 
             if (userId != null)
             {
-                var eventAccount = new EventAccount()
+              
+                var accountonEvents = new AccountOnEvent()
                 {
                     AccountId = userId,
-                    EventId = @event.EventId,
+                    EventId = @event.EventId
                 };
 
-                _context.EventAccount.Add(eventAccount);
+                _context.AccountOnEvent.Add(accountonEvents);
             }
         }
 

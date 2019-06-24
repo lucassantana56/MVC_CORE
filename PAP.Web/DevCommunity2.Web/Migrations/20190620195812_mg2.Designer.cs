@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PAP.Business.DbContext;
 
 namespace DevCommunity2.Web.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    partial class ApplicationDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20190620195812_mg2")]
+    partial class mg2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -475,9 +477,9 @@ namespace DevCommunity2.Web.Migrations
 
                     b.Property<Guid>("AccountId");
 
-                    b.Property<int>("EventId");
+                    b.Property<DateTime>("DataPublish");
 
-                    b.Property<DateTime>("PublishDate");
+                    b.Property<int>("EventId");
 
                     b.HasKey("PublishEventId");
 

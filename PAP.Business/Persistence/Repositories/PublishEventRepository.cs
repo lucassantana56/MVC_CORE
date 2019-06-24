@@ -5,6 +5,7 @@ using PAP.DataBase;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace PAP.Business.Persistence.Repositories
 {
@@ -17,46 +18,84 @@ namespace PAP.Business.Persistence.Repositories
             _context = context;
         }
 
-        public void EventPublish(EventPostViewModel EventfeedPost, Guid UserId)
+        public void AddEventPublish(EventPostViewModel feedPost, Guid userId)
         {
-            var AccountEventPublish = new PublishEvent()
+            var publishEvent = new PublishEvent()
             {
-                AccountId = UserId,
-                DataPublish = DateTime.Now,
+                AccountId = userId,
+                PublishDate = DateTime.Now,
             };
 
-            _context.PublishEvent.Add(AccountEventPublish);
+            _context.PublishEvent.Add(publishEvent);
 
-            var contentEventPublish = new ContentPublishEvent()
+            var contentPublishEvent = new ContentPublishEvent()
             {
-                PublishEventId = AccountEventPublish.PublishEventId,
-                TextContent = EventfeedPost.TextOnPublish
+                PublishEventId = publishEvent.PublishEventId,
+                TextContent = feedPost.TextOnPublish
             };
 
-            _context.ContentPublishEvent.Add(contentEventPublish);
+            _context.ContentPublishEvent.Add(contentPublishEvent);
 
-            var photoContentPublishAccount = new PhotoContentPublishEvent()
+            var photoContentPublishEvent = new PhotoContentPublishEvent()
             {
-                ContentPublishEventId = contentEventPublish.ContentPublishEventId,
-                PhotoURl = EventfeedPost.Path
+                ContentPublishEventId = contentPublishEvent.ContentPublishEventId,
+                PhotoURl = feedPost.Path
             };
-            _context.PhotoContentPublishEvent.Add(photoContentPublishAccount);
+            _context.PhotoContentPublishEvent.Add(photoContentPublishEvent);
         }
 
-        //public IEnumerable<EventFeedIndexViewModel> GetEventPublishes()
-        //{
-        //    var publishEvent = (from pe in _context.PublishEvent
-        //                        let ac = pe.Account
-        //                        let cpe = pe.contentEventPublish
-        //                        let pcpe = cpa.photoContentPublishAccount
-        //                        select new FeedIndexViewModel()
-        //                        {
-        //                            TextOnPublish = cpe.TextContent,
-        //                            UserNick = ac.NickName,
-        //                            UserPublishPhoto = ac.PhotoUrl,
-        //                            PhotoPath = pcpe.FirstOrDefault().PhotoURl
-        //                        }).ToList();
-        //    return publishEvent;
-        //}
+        public IEnumerable<EventFeedIndexViewModel> GetEventPublishes()
+        {
+            var EventPublish = from pe in _context.PublishEvent
+                               join ac in _context.Users
+                               on pe.AccountId equals ac.Id
+                               join ce in _context.ContentPublishEvent
+                               on pe.PublishEventId equals ce.PublishEventId
+                               join pce in _context.PhotoContentPublishEvent
+                               on ce.ContentPublishEventId equals pce.ContentPublishEventId
+                               select new EventFeedIndexViewModel
+                               {
+                                   ContentPublishId = ce.ContentPublishEventId,
+                                   AccountPublishId = pe.PublishEventId,
+                                   TextOnPublish = ce.TextContent,
+                                   UserNick = ac.NickName,
+                                   UserPublishPhoto = ac.PhotoUrl,
+                                   PhotoPath = pce.PhotoURl,
+                                   EventFeedIndexFeedBacks = GetAccountPublishFeedBack(pe.PublishEventId)
+                               };
+
+            return EventPublish;
+        }
+
+        public IEnumerable<EventFeedIndexFeedBackViewModel> GetAccountPublishFeedBack(int PublishEventId)
+        {
+            var FeedEventPublishFeedBack = from AP in _context.AccountPublish
+                                           join AC in _context.Users on
+                                           AP.AccountId equals AC.Id
+                                           join FBCA in _context.FeedBackContentAccount
+                                           on AP.AccountId equals FBCA.AccountId
+                                           select new EventFeedIndexFeedBackViewModel()
+                                           {
+                                               EventFeedBackText = FBCA.Description,
+                                               UserNick = AC.NickName,
+                                               UserPhoto = AC.PhotoUrl
+                                           };
+
+            return FeedEventPublishFeedBack;
+
+        }
+
+
+        public void AddFeedBack(EventFeedIndexFeedBackViewModel FeedBack, Guid UserId)
+        {
+            var accountPublishFeedBack = new FeedBackContentAccount()
+            {
+                AccountId = UserId,
+                AccountPublishId = FeedBack.EventPublishId,
+                Description = FeedBack.EventFeedBackText
+            };
+
+            _context.FeedBackContentAccount.AddAsync(accountPublishFeedBack);
+        }
     }
 }

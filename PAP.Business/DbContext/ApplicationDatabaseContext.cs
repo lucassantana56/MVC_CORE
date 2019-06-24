@@ -19,8 +19,7 @@ namespace PAP.Business.DbContext
         public virtual DbSet<AccountRelationship> AccountRelationship { get; set; }
         public virtual DbSet<ContentPublishAccount> ContentPublishAccount { get; set; }
         public virtual DbSet<ContentPublishEvent> ContentPublishEvent { get; set; }
-        public virtual DbSet<Event> Event { get; set; }
-        public virtual DbSet<EventAccount> EventAccount { get; set; }
+        public virtual DbSet<Event> Event { get; set; }   
         public virtual DbSet<FeedBackContentAccount> FeedBackContentAccount { get; set; }
         public virtual DbSet<FeedBackContentEvent> FeedBackContentEvent { get; set; }
         public virtual DbSet<PhotoContentPublishAccount> PhotoContentPublishAccount { get; set; }

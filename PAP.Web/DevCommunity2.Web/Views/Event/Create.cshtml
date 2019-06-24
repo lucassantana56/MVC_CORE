@@ -4,11 +4,7 @@
     Layout = "~/Views/Shared/LayoutAuth.cshtml";
 }
 
-<body>
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-
+<body>  
         <br />
         <div class="card">
             <h5 class="card-header info-color white-text text-center py-4">
@@ -19,34 +15,30 @@
             <div class="card-body px-lg-5 pt-0">
 
                 <!-- Form -->
-                <form class="text-center" style="color: #757575;">
+                <form asp-controller="Event" asp-action="Create" class="text-center" style="color: #757575;">
+
+                    @Html.AntiForgeryToken()
 
                     <!-- Name -->
                     <div class="md-form mt-3">
-                        <input asp-for="EventName" type="text" id="materialContactFormName" class="form-control">
-                        <label for="materialContactFormName">Name</label>
+                        <input asp-for="EventName" type="text" id="materialContactFormName" placeholder="Name" class="form-control">
                     </div>
 
-                    <!-- E-mail -->
-                    <div class="md-form">
-                        <input type="date" asp-for="EventDate" id="materialContactFormEmail" class="form-control">
-                        <label for="materialContactFormEmail">Date</label>
-                    </div>
 
-                    <!-- Subject -->
-                    <label>Subject</label>
-                    <select class="browser-default custom-select mb-4">
-                        <option value="" disabled>Choose option</option>
-                        <option value="1" selected>Feedback</option>
-                        <option value="2">Report a bug</option>
-                        <option value="3">Feature request</option>
-                        <option value="4">Feature request</option>
-                    </select>
-
-                    <!--Message-->
+                    <!--Description-->
                     <div class="md-form">
                         <textarea id="materialContactFormMessage" asp-for="Description" class="form-control md-textarea" rows="3"></textarea>
                         <label for="materialContactFormMessage">Description</label>
+                    </div>
+
+                    <!-- EventDate -->
+                    <div class="md-form">
+                        <input type="date" asp-for="EventDate" id="materialContactFormEmail" placeholder="Date" class="form-control">
+                    </div>
+
+
+                    <div class="md-form">
+                        <input type="text" asp-for="Location" id="materialContactFormEmail" placeholder="Location" class="form-control">
                     </div>
 
                     <!-- Send button -->
@@ -58,8 +50,6 @@
             </div>
 
         </div>     
-    }
-
     <div>
         @Html.ActionLink("Back to List", "Index")
     </div>

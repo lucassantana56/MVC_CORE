@@ -14,7 +14,7 @@ namespace PAP.DataBase
 
         public Guid  AccountId { get; set; }
 
-        public DateTime DataPublish { get; set; }
+        public DateTime PublishDate { get; set; }
 
         [ForeignKey(nameof(AccountId))]
         public virtual User Account { get; set; }
