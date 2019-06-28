@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using PAP.Business.Managers;
 using PAP.Business.Persistence.Repositories;
 using PAP.Business.Repositories;
+using PAP.Business.ViewModels.Account;
 using PAP.DataBase.Auth;
 
 namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
@@ -21,18 +27,23 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly IAccountRepository _AccountRepository;
-
+        private readonly HostingEnvironment _hostingEnvironment;
+        private readonly BaseManager _BaseManager;
 
         public IndexModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IEmailSender emailSender,
-            IAccountRepository AccountRepo)
+            IAccountRepository AccountRepo,
+             IHostingEnvironment hostingEnvironment,
+              BaseManager baseManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _AccountRepository = (AccountRepository)AccountRepo;
+            _hostingEnvironment = (HostingEnvironment)hostingEnvironment;
+            _BaseManager = baseManager;
         }
 
 
@@ -46,21 +57,17 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
-            [Required]
+
             [EmailAddress]
             public string Email { get; set; }
 
-            [Phone]
-            [Display(Name = "Phone number")]
-            public string PhoneNumber { get; set; }
+            public string NickName { get; set; }
 
-           
-            [Display(Name ="Photo")]
-            public string  PhotoUrl { get; set; }
 
-            [Display(Name ="Country")]
-            [Required]
-            public string Country { get; set; }
+            [Display(Name = "Photo")]
+            public IFormFile PhotoUrl { get; set; }
+
+
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -71,15 +78,14 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-         
+
             var email = await _userManager.GetEmailAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-           
+
+
 
             Input = new InputModel
             {
-                Email = email,
-                PhoneNumber = phoneNumber              
+                Email = email
             };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
@@ -111,19 +117,29 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            var uploadFolder = Path.Combine(
+                    _hostingEnvironment.WebRootPath, "Images", "AccountPublish");
+            var uniqueFileName = Guid.NewGuid() + Input.PhotoUrl.FileName;
+
+            var path = Path.Combine(uploadFolder, uniqueFileName);
+
+
+            using (var stream = new FileStream(path, FileMode.Create))
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
-                {
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
-                }
+                await Input.PhotoUrl.CopyToAsync(stream);
             }
 
-           // _AccountRepository.UpdateData();
+            Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId2);
 
+            var account = new AccountDataViewModel()
+            {
+                UserName = Input.NickName,
+                FileName = uniqueFileName,
+                UserId = userId2
+            };
+
+            _AccountRepository.UpdateData(account);
+            _BaseManager.SaveChanges();
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
