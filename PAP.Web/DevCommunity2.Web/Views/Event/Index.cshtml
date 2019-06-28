@@ -40,13 +40,11 @@
                 @if (item.IsUserCreated)
                 {
                     @Html.ActionLink("Edit", "Edit", new { @class = "btn btn-primary", id = item.EventId })
-                    @Html.ActionLink("Details", "Details", new { id = item.EventId })
-                    @Html.ActionLink("Delete", "Delete", new { id = item.EventId })
                 }
 
             </div>
             <div class="card-footer text-muted">
-                Created on : @item.DateCreated.ToShortDateString();
+                Created on : @item.DateCreated.ToShortDateString()
             </div>
         </div>
     </div>

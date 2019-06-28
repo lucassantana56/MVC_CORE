@@ -9,7 +9,7 @@ namespace PAP.Business.Repositories
 {
     public interface IAccountRepository
     {
-        void UpdateData(AccountDataViewModel user, Guid UserId);
+        void UpdateData(AccountDataViewModel user);
 
         AccountInfoViewModel GetUserInfo(Guid UserId);
     }

@@ -187,16 +187,12 @@ namespace PAP.Business.Persistence.Repositories
 
         public void EditEvent(EventViewModel entity)
         {
-            var @event = _context.Event.Select(e => new EventViewModel()
-            {
-                EventId = e.EventId,
-                EventName = e.NameEvent,
-                EventDate = e.DateEvent,
-                TypeOfEvent = e.TypeOfEvent,
-                Location = e.Location,
-                PhotoUrl = e.PhotoUrl
+            var @event = _context.Event.Find(entity.EventId);
 
-            }).FirstOrDefault(e => e.EventId == entity.EventId);
+            @event.DateEvent = entity.EventDate;
+            @event.Description = entity.Description;
+            @event.Location = entity.Location;
+            @event.NameEvent = entity.EventName;                         
         }
     }
 

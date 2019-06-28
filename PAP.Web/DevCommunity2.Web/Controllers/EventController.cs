@@ -86,10 +86,7 @@ namespace DevCommunity2.Web.Controllers
         {
             return View();
         }
-        public ActionResult tst()
-        {
-            return View();
-        }
+      
         // POST: Event/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -116,6 +113,7 @@ namespace DevCommunity2.Web.Controllers
         {
             try
             {
+
                 return View();
             }
             catch (Exception)
@@ -128,13 +126,15 @@ namespace DevCommunity2.Web.Controllers
         // POST: Event/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind("EventId,NameEvent,DateCreated,DateEvent,TypeOfEvent,LocationWhat3words,PhotoUrl,Description,Stars")] EventViewModel @event)
+        public ActionResult Edit(EventViewModel @event, int id)
         {
             // TODO: Add update logic here
             try
             {
+                @event.EventId = id;
                 _eventRepo.EditEvent(@event);
-                return View();
+                _BaseManager.SaveChanges();
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception)
             {

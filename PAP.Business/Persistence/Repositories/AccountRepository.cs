@@ -1,13 +1,9 @@
 ﻿using PAP.Business.DbContext;
 using PAP.Business.Repositories;
-using PAP.Business.ViewModels;
 using PAP.Business.ViewModels.Account;
 using PAP.DataBase.Auth;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace PAP.Business.Persistence.Repositories
 {
@@ -20,12 +16,13 @@ namespace PAP.Business.Persistence.Repositories
             _context = context;
         }
 
-        public void UpdateData(AccountDataViewModel user, Guid UserId)
+        public void UpdateData(AccountDataViewModel user)
         {
-            var User = _context.Users.Find(UserId);
+            var User = _context.Users.Find(user.UserId);
             User.PhotoUrl = user.PhotoUniqueName;
             User.Country = user.Country;
             User.ProgrammingLanguages = user.ProgramminglLanguages;
+            
 
         }
 
