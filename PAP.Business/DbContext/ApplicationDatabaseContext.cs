@@ -19,8 +19,7 @@ namespace PAP.Business.DbContext
         public virtual DbSet<AccountRelationship> AccountRelationship { get; set; }
         public virtual DbSet<ContentPublishAccount> ContentPublishAccount { get; set; }
         public virtual DbSet<ContentPublishEvent> ContentPublishEvent { get; set; }
-        public virtual DbSet<Event> Event { get; set; }
-        public virtual DbSet<EventAccount> EventAccount { get; set; }
+        public virtual DbSet<Event> Event { get; set; }   
         public virtual DbSet<FeedBackContentAccount> FeedBackContentAccount { get; set; }
         public virtual DbSet<FeedBackContentEvent> FeedBackContentEvent { get; set; }
         public virtual DbSet<PhotoContentPublishAccount> PhotoContentPublishAccount { get; set; }
@@ -32,6 +31,10 @@ namespace PAP.Business.DbContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>()
+                .Property(P => P.PhotoUrl)
+                .HasDefaultValue("DefaultUserPhoto.png");
 
             modelBuilder.Entity<AccountPublish>()
                 .HasOne(AP => AP.ContentPublishAccounts)

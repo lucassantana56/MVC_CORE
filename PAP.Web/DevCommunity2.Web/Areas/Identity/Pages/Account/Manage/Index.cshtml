@@ -34,7 +34,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Input.PhotoUrl"></label>
-                <input asp-for="Input.PhotoUrl" class="form-control" />
+                <input type="file" asp-for="Input.PhotoUrl" class="btn btn-primary btn-sm float-left" />
                 <span asp-validation-for="Input.PhotoUrl" class="text-danger"></span>
             </div>
             <div class="form-group">

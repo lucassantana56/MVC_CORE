@@ -20,25 +20,17 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
         <!-- MDB core JavaScript -->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.2/js/mdb.min.js"></script>
+
         <link rel="stylesheet" href="~/css/LayoutAuth.css" />
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm  navbar-toggleable-sm navbar-dark bg-primary">
-        <a class="navbar-brand" asp-area="" asp-controller="Feed" asp-action="Index">DevCommunity</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-            <div id="ex4">
-                <span class="p1 fa-stack fa-2x has-badge" data-count="4">
-                    <a href="@Url.Action("Index","Event")">
-                        <i class="p3 fa fa-calendar fa-stack-1x xfa-inverse" data-count="4b"></i>
-                    </a>
-                </span>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark  bg-primary border-bottom box-shadow mb-3">
+        <div class="container">
+            <a class="navbar-brand"  asp-controller="Feed" asp-action="Index">DevCommunity</a>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <partial name="_LoginPartial" />
             </div>
-            <img src="~/Images/UserPhotos/DefaultUserPhoto.png" class="user-photo d-flex rounded-circle avatar  mr-3" style="height:50px;padding-left:12px;" />
         </div>
     </nav>
 
@@ -50,7 +42,7 @@
         $(function () {
             $.ajax({
                 type: "POST",
-                url: "@Url.Action("GetUserPhoto","User")",
+                url: "@Url.Action("GetUserPhoto", "User")",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
@@ -67,7 +59,7 @@
             $(function () {
             $.ajax({
                 type: "POST",
-                url: "@Url.Action("GetNickName","User")",
+                url: "@Url.Action("GetNickName", "User")",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
@@ -82,5 +74,6 @@
         })
     </script>
     @RenderSection("ScriptsAuth", required: false)
+
 </body>
 </html>

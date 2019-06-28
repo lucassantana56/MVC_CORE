@@ -1,81 +1,21 @@
 ﻿@model List<FeedIndexViewModel>
-    @{
+@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/LayoutAuth.cshtml";
-    }
+}
 
-    @{
+@{
     FeedPostViewModel fpvm = new FeedPostViewModel();
-    FeedIndexFeedBackViewModel Fifvm = new FeedIndexFeedBackViewModel();
-    }
-    <br />
-    <partial name="_FeedCreatePost" model="fpvm" />
-    <br />
-    <br />
+}
+<br />
+<partial name="_FeedCreatePost" model="fpvm" />
+<br />
+<br />
+@if (Model != null)
+{
     @foreach (var item in Model)
     {
-    Fifvm.AccountPublishId = item.AccountPunlishId;
-
-    <partial name="_FeedIndexViewModel" model="item" />
-    <partial name="_FeedAccountPublishFeedBack" model="Fifvm" />
-    <partial name="_FeedAccountPublishFeedBackIndex" />
+        <partial name="_FeedIndexViewModel" model="item" />
     }
-    @section ScriptsAuth {
-    <script>
-    function FeedCreate(form) {
-        $.validator.unobtrusive.parse(form);
-        if ($(form).valid()) {
-            var ajaxConfig = {
-                type: 'POST',
-                url: '@Url.Action("Create", "Feed")',
-                data: new FormData(form),
-                success: function (response) {
-                    if (response.success) {
-                        $.notify(response.message, "sucess");
-                    }
-                    else {
-                        $.notify(response.message, "error");
-                    }
-                }
-            }
-            if ($(form).attr('enctype') == "multipart/form-data") {
-                ajaxConfig["contentType"] = false;
-                ajaxConfig["processData"] = false;
-            }
-            $.ajax(ajaxConfig)
-       }
-    }
+}
 
-        var input = document.getElementById("feedbacktext");
-
-        // Execute a function when the user releases a key on the keyboard
-        input.addEventListener("keyup", function (event) {
-            // Number 13 is the "Enter" key on the keyboard
-
-            if (event.keyCode === 13) { 
-                // Trigger the button element with a click
-                document.getElementById("formFeedBack").submit();
-            }
-        });
-
-        function FeedCreateFeedback(form) {
-           $.validator.unobtrusive.parse(form);
-            if ($(form).valid()) {
-                var ajaxConfig = {
-                    type: 'POST',
-                    url: @Url.Action("Create"),
-                    data: new FormData(form),
-                    success: function (response) {
-                        if (response.success) {
-                            $.notify(response.message, "sucess");
-                        }
-                        else {
-                            $.notify(response.message, "error");
-                        }
-                    }
-                }
-                $.ajax(ajaxConfig)
-            }
-        }
-    </script>
-    }

@@ -8,6 +8,7 @@ namespace PAP.Business.ViewModels
     {
         public int AccountPublishId { get; set; }
         public string FeedBackText { get; set; }
-        public int FeedBackStars { get; set; }
+        public string UserNick { get; set; }
+        public string UserPhotoFeedBack { get; set; }
     }
 }

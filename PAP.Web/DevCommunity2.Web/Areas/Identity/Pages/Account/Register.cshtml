@@ -20,7 +20,7 @@
                 <div class="col">
                     <!-- First name -->
                     <div class="md-form">
-                        <input type="text" id="materialRegisterFormFirstName" asp-for="Input.NickName" placeholder="NickName" class="form-control">                 
+                        <input type="text" id="materialRegisterFormFirstName" asp-for="Input.NickName" placeholder="NickName" class="form-control">
                         <span asp-validation-for="Input.NickName" class="text-danger"></span>
                     </div>
                 </div>
@@ -28,20 +28,25 @@
 
             <!-- E-mail -->
             <div class="md-form mt-0">
-                <input type="email" id="materialRegisterFormEmail" asp-for="Input.Email" placeholder="E-mail" class="form-control">              
+                <input type="email" id="materialRegisterFormEmail" asp-for="Input.Email" placeholder="E-mail" class="form-control">
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
 
             <!-- Password -->
             <div class="md-form">
-                <input type="password" id="materialRegisterFormPassword" asp-for="Input.Password" class="form-control" aria-describedby="materialRegisterFormPasswordHelpBlock" placeholder="Password">              
+                <input type="password" id="materialRegisterFormPassword" asp-for="Input.Password" class="form-control" aria-describedby="materialRegisterFormPasswordHelpBlock" placeholder="Password">
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <div class="md-form">
+                <input type="password" id="materialRegisterFormPassword" asp-for="Input.ConfirmPassword" class="form-control" aria-describedby="materialRegisterFormPasswordHelpBlock" placeholder="Confirm Password">
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
 
             <div class="file-field">
                 <div class="mb-4">
                     <img src="~/Images/UserPhotos/DefaultUserPhoto.png"
-                         class="rounded-circle z-depth-1-half avatar-pic" width="50px;" alt="example placeholder avatar">
+                         class="rounded-circle z-depth-1-half avatar-pic" width="50" alt="example placeholder avatar">
                 </div>
                 <div class="d-flex justify-content-center">
                     <div class="btn btn-mdb-color btn-rounded float-left">
@@ -50,19 +55,21 @@
                     </div>
                 </div>
             </div>
-           
+
             <!-- Sign up button -->
             <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">Register</button>
             <hr>
         </form>
-            <!-- Social register -->
-            <p>or sign up with:</p>
+        <!-- Social register -->
+        <p>or sign up with:</p>
 
-            @{
-
+        @{
+            if ((Model.ExternalLogins?.Count ?? 0) != 0)
+            {
                 <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
                     <div>
                         <p>
+
                             @foreach (var provider in Model.ExternalLogins)
                             {
                                 <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
@@ -70,12 +77,10 @@
                         </p>
                     </div>
                 </form>
-
             }
 
 
-           
-
+        }
     </div>
 
 </div>

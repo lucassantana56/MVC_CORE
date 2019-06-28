@@ -1,56 +1,138 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PAP.Business.Managers;
+using PAP.Business.Persistence.Repositories;
+using PAP.Business.Repositories;
+using PAP.Business.ViewModels;
+using PAP.Business.ViewModels.Event;
 
 namespace DevCommunity2.Web.Controllers
 {
     public class EventFeedController : Controller
     {
-        // GET: EventFeed
-        public ActionResult Index()
+        private readonly PublishEventRepository _publishEventRepository;
+        private readonly BaseManager _BaseManager;
+        private readonly HostingEnvironment _hostingEnvironment;
+       
+
+
+        public EventFeedController(IPublishEventRepository publishEventRepository, BaseManager baseManager, IHostingEnvironment hostingEnvironment)
         {
-            return View();
+            _publishEventRepository = (PublishEventRepository)publishEventRepository;
+            _BaseManager = baseManager;
+            _hostingEnvironment = (HostingEnvironment)hostingEnvironment;
         }
 
-        // GET: EventFeed/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Index(int EventId)
         {
-            return View();
+
+            if (EventId == 0)
+            {
+                EventId = (int)TempData["EventId"]; 
+            }
+            if (EventId != 0)
+             {
+                var result = _publishEventRepository.GetEventPublishes(EventId).ToList();
+                TempData["EventId"] = EventId;
+               
+                return View(result);
+            }
+            return BadRequest();
         }
 
-        // GET: EventFeed/Create
+        // GET: Feed/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: EventFeed/Create
+        // POST: Feed/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(EventPostViewModel FeedPost, IFormFile File)
         {
             try
             {
-                // TODO: Add insert logic here
+
+                var uploadFolder = Path.Combine(
+                    _hostingEnvironment.WebRootPath, "Images", "PublishEvent");
+                var uniqueFileName = Guid.NewGuid() + File.FileName;
+
+                var path = Path.Combine(uploadFolder, uniqueFileName);
+
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await File.CopyToAsync(stream);
+                }
+                FeedPost.EventId = int.Parse(TempData["EventId"].ToString());
+
+                TempData.Keep("EventId");
+
+                Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
+
+                string pic = System.IO.Path.GetFileName(File.FileName);
+
+                FeedPost.Path = uniqueFileName;
+
+                _publishEventRepository.AddEventPublish(FeedPost, userId, FeedPost.EventId);
+                _BaseManager.SaveChanges();
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception)
             {
-                return View();
+                return Json(new { success = false, message = "erro" });
+                throw;
             }
+
         }
 
-        // GET: EventFeed/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateFeedBack(EventFeedIndexViewModel feedIndexViewModel)
+        {
+            Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
+
+            if (userId == null)
+            {
+                return Json(new { success = false, message = "erro" });
+            }
+
+            var fifvm = new EventFeedIndexFeedBackViewModel()
+            {
+                EventPublishId = feedIndexViewModel.AccountPublishId,
+                EventFeedBackText = feedIndexViewModel.FeedBackText
+            };
+
+            try
+            {
+
+                _publishEventRepository.AddFeedBack(fifvm, userId);
+                _BaseManager.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+                throw;
+            }
+        }
+        // GET: Feed/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: EventFeed/Edit/5
+        // POST: Feed/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -67,13 +149,13 @@ namespace DevCommunity2.Web.Controllers
             }
         }
 
-        // GET: EventFeed/Delete/5
+        // GET: Feed/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: EventFeed/Delete/5
+        // POST: Feed/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

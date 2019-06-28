@@ -31,6 +31,7 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
+            returnUrl = "~/Home/Index";
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);

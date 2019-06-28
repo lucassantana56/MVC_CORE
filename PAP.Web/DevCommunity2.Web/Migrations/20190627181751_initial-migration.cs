@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DevCommunity2.Web.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class initialmigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,7 +44,7 @@ namespace DevCommunity2.Web.Migrations
                     FistName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
                     NickName = table.Column<string>(nullable: true),
-                    PhotoUrl = table.Column<string>(nullable: true),
+                    PhotoUrl = table.Column<string>(nullable: true, defaultValue: "DefaultUserPhoto.png"),
                     Stars = table.Column<int>(nullable: false, defaultValue: 3),
                     ProgrammingLanguages = table.Column<string>(nullable: true),
                     Country = table.Column<string>(nullable: true)
@@ -69,7 +69,8 @@ namespace DevCommunity2.Web.Migrations
                     PhotoUrl = table.Column<string>(maxLength: 500, nullable: true),
                     Description = table.Column<string>(maxLength: 500, nullable: true),
                     Stars = table.Column<int>(nullable: false, defaultValue: 3),
-                    IsEnabled = table.Column<bool>(nullable: false, defaultValue: true)
+                    IsEnabled = table.Column<bool>(nullable: false, defaultValue: true),
+                    CreatedByUserID = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -295,32 +296,6 @@ namespace DevCommunity2.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EventAccount",
-                columns: table => new
-                {
-                    EventAccountId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AccountId = table.Column<Guid>(nullable: false),
-                    EventId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventAccount", x => x.EventAccountId);
-                    table.ForeignKey(
-                        name: "FK_EventAccount_AspNetUsers_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EventAccount_Event_EventId",
-                        column: x => x.EventId,
-                        principalTable: "Event",
-                        principalColumn: "EventId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PublishEvent",
                 columns: table => new
                 {
@@ -328,7 +303,7 @@ namespace DevCommunity2.Web.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     EventId = table.Column<int>(nullable: false),
                     AccountId = table.Column<Guid>(nullable: false),
-                    DataPublish = table.Column<DateTime>(nullable: false)
+                    PublishDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -620,16 +595,6 @@ namespace DevCommunity2.Web.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventAccount_AccountId",
-                table: "EventAccount",
-                column: "AccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EventAccount_EventId",
-                table: "EventAccount",
-                column: "EventId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_FeedBackContentAccount_AccountId",
                 table: "FeedBackContentAccount",
                 column: "AccountId");
@@ -705,9 +670,6 @@ namespace DevCommunity2.Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "EventAccount");
 
             migrationBuilder.DropTable(
                 name: "FeedBackContentAccount");

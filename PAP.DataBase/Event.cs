@@ -36,13 +36,15 @@ namespace PAP.DataBase
 
         public bool  IsEnabled { get; set; }
 
+        [Required]
+        public Guid CreatedByUserID { get; set; }
+
         [InverseProperty(nameof(AccountNotification.Event))]
         public virtual ICollection<AccountNotification> AccountNotifications { get; set; }
 
         [InverseProperty(nameof(AccountOnEvent.Event))]
         public virtual ICollection<AccountOnEvent> AccountOnEvents { get; set; }
-        [InverseProperty(nameof(EventAccount.Event))]
-        public virtual ICollection<EventAccount> EventAccounts { get; set; }
+    
 
         [InverseProperty(nameof(PublishEvent.Event))]
         public virtual ICollection<PublishEvent> PublishEvents { get; set; }

@@ -8,7 +8,7 @@ namespace PAP.Business.ViewModels
 {
     public class FeedIndexViewModel
     {
-        public int AccountPunlishId { get; set; }
+        public int AccountPublishId { get; set; }
         [DataType(DataType.MultilineText)]
         public string TextOnPublish { get; set; }
         public string PhotoPath { get; set; }
@@ -18,6 +18,10 @@ namespace PAP.Business.ViewModels
         public string  UserPublishPhoto { get; set; }
 
         public int ContentPublishId { get; set; }
+        //create feedback
+        public string FeedBackText { get; set; }
+        //feedback index
+        public IEnumerable<FeedIndexFeedBackViewModel> feedIndexFeedBacks { get; set; }
 
     }
 }

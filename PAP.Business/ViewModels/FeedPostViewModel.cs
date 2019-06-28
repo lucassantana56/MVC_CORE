@@ -16,8 +16,5 @@ namespace PAP.Business.ViewModels
         public string FileName { get; set; }
 
         public Guid UserId { get; set; }
-
-
-
     }
 }

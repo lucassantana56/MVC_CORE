@@ -1,10 +1,7 @@
 ﻿#ex4 .p1[data-count]:after {
     position: absolute;
-    right: 10%;
-    top: 8%;
     content:"40";
     font-size: 40%;
-    padding: .2em;
     border-radius: 50%;
     line-height: 1em;
     color: white;

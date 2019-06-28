@@ -242,7 +242,9 @@ namespace DevCommunity2.Web.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<string>("PhotoUrl");
+                    b.Property<string>("PhotoUrl")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue("DefaultUserPhoto.png");
 
                     b.Property<string>("ProgrammingLanguages");
 
@@ -344,6 +346,8 @@ namespace DevCommunity2.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<Guid>("CreatedByUserID");
+
                     b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime>("DateEvent");
@@ -375,25 +379,6 @@ namespace DevCommunity2.Web.Migrations
                     b.HasKey("EventId");
 
                     b.ToTable("Event");
-                });
-
-            modelBuilder.Entity("PAP.DataBase.EventAccount", b =>
-                {
-                    b.Property<int>("EventAccountId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<Guid>("AccountId");
-
-                    b.Property<int>("EventId");
-
-                    b.HasKey("EventAccountId");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("EventId");
-
-                    b.ToTable("EventAccount");
                 });
 
             modelBuilder.Entity("PAP.DataBase.FeedBackContentAccount", b =>
@@ -492,9 +477,9 @@ namespace DevCommunity2.Web.Migrations
 
                     b.Property<Guid>("AccountId");
 
-                    b.Property<DateTime>("DataPublish");
-
                     b.Property<int>("EventId");
+
+                    b.Property<DateTime>("PublishDate");
 
                     b.HasKey("PublishEventId");
 
@@ -651,19 +636,6 @@ namespace DevCommunity2.Web.Migrations
                     b.HasOne("PAP.DataBase.PublishEvent", "PublishEvent")
                         .WithOne("ContentPublishEvent")
                         .HasForeignKey("PAP.DataBase.ContentPublishEvent", "PublishEventId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("PAP.DataBase.EventAccount", b =>
-                {
-                    b.HasOne("PAP.DataBase.Auth.User", "Account")
-                        .WithMany("EventAccounts")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("PAP.DataBase.Event", "Event")
-                        .WithMany("EventAccounts")
-                        .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

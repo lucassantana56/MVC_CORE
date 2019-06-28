@@ -26,9 +26,7 @@ namespace PAP.DataBase.Auth
         [InverseProperty(nameof(AccountPublish.Account))]
         public virtual ICollection<AccountPublish> AccountPublishes  { get; set; }
 
-        [InverseProperty(nameof(EventAccount.Account))]
-        public virtual ICollection<EventAccount> EventAccounts { get; set; }
-
+       
         [InverseProperty(nameof(FeedBackContentAccount.Account))]
         public virtual  ICollection<FeedBackContentAccount> FeedBackContentAccounts { get; set; }
 
