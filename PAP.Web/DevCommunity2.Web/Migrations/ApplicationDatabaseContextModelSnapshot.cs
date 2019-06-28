@@ -242,7 +242,9 @@ namespace DevCommunity2.Web.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<string>("PhotoUrl");
+                    b.Property<string>("PhotoUrl")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue("DefaultUserPhoto.png");
 
                     b.Property<string>("ProgrammingLanguages");
 

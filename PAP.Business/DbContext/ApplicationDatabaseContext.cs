@@ -32,6 +32,10 @@ namespace PAP.Business.DbContext
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<User>()
+                .Property(P => P.PhotoUrl)
+                .HasDefaultValue("DefaultUserPhoto.png");
+
             modelBuilder.Entity<AccountPublish>()
                 .HasOne(AP => AP.ContentPublishAccounts)
                 .WithOne(I => I.AccountPublish)

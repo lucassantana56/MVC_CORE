@@ -18,11 +18,12 @@ namespace PAP.Business.Persistence.Repositories
             _context = context;
         }
 
-        public void AddEventPublish(EventPostViewModel feedPost, Guid userId)
+        public void AddEventPublish(EventPostViewModel FeedPost, Guid UserId,int EventId)
         {
             var publishEvent = new PublishEvent()
             {
-                AccountId = userId,
+                EventId  = EventId,  
+                AccountId = UserId,
                 PublishDate = DateTime.Now,
             };
 
@@ -31,7 +32,7 @@ namespace PAP.Business.Persistence.Repositories
             var contentPublishEvent = new ContentPublishEvent()
             {
                 PublishEventId = publishEvent.PublishEventId,
-                TextContent = feedPost.TextOnPublish
+                TextContent = FeedPost.TextOnPublish
             };
 
             _context.ContentPublishEvent.Add(contentPublishEvent);
@@ -39,12 +40,12 @@ namespace PAP.Business.Persistence.Repositories
             var photoContentPublishEvent = new PhotoContentPublishEvent()
             {
                 ContentPublishEventId = contentPublishEvent.ContentPublishEventId,
-                PhotoURl = feedPost.Path
+                PhotoURl = FeedPost.Path
             };
             _context.PhotoContentPublishEvent.Add(photoContentPublishEvent);
         }
 
-        public IEnumerable<EventFeedIndexViewModel> GetEventPublishes()
+        public IEnumerable<EventFeedIndexViewModel> GetEventPublishes(int EventId)
         {
             var EventPublish = from pe in _context.PublishEvent
                                join ac in _context.Users
@@ -53,6 +54,7 @@ namespace PAP.Business.Persistence.Repositories
                                on pe.PublishEventId equals ce.PublishEventId
                                join pce in _context.PhotoContentPublishEvent
                                on ce.ContentPublishEventId equals pce.ContentPublishEventId
+                               where pe.EventId == EventId 
                                select new EventFeedIndexViewModel
                                {
                                    ContentPublishId = ce.ContentPublishEventId,
@@ -61,24 +63,25 @@ namespace PAP.Business.Persistence.Repositories
                                    UserNick = ac.NickName,
                                    UserPublishPhoto = ac.PhotoUrl,
                                    PhotoPath = pce.PhotoURl,
-                                   EventFeedIndexFeedBacks = GetAccountPublishFeedBack(pe.PublishEventId)
+                                   EventFeedIndexFeedBacks = GetAccountPublishFeedBack(pe.PublishEventId,pe.EventId)
                                };
 
             return EventPublish;
         }
 
-        public IEnumerable<EventFeedIndexFeedBackViewModel> GetAccountPublishFeedBack(int PublishEventId)
+        public IEnumerable<EventFeedIndexFeedBackViewModel> GetAccountPublishFeedBack(int PublishEventId,int EventId)
         {
-            var FeedEventPublishFeedBack = from AP in _context.AccountPublish
-                                           join AC in _context.Users on
-                                           AP.AccountId equals AC.Id
-                                           join FBCA in _context.FeedBackContentAccount
-                                           on AP.AccountId equals FBCA.AccountId
+            var FeedEventPublishFeedBack = from FBCA in _context.FeedBackContentEvent 
+                                           join AC in _context.Users 
+                                           on FBCA.AccountId equals AC.Id
+                                           join EVP in _context.PublishEvent
+                                           on FBCA.EventPublishId equals EVP.PublishEventId                                         
+                                           where FBCA.EventPublishId  == PublishEventId && EVP.EventId == EventId 
                                            select new EventFeedIndexFeedBackViewModel()
                                            {
                                                EventFeedBackText = FBCA.Description,
                                                UserNick = AC.NickName,
-                                               UserPhoto = AC.PhotoUrl
+                                               UserPhotoFeedBack = AC.PhotoUrl
                                            };
 
             return FeedEventPublishFeedBack;
@@ -88,14 +91,14 @@ namespace PAP.Business.Persistence.Repositories
 
         public void AddFeedBack(EventFeedIndexFeedBackViewModel FeedBack, Guid UserId)
         {
-            var accountPublishFeedBack = new FeedBackContentAccount()
-            {
+            var accountPublishFeedBack = new FeedBackContentEvent()
+            {    
                 AccountId = UserId,
-                AccountPublishId = FeedBack.EventPublishId,
+                 EventPublishId  = FeedBack.EventPublishId,
                 Description = FeedBack.EventFeedBackText
             };
 
-            _context.FeedBackContentAccount.AddAsync(accountPublishFeedBack);
+            _context.FeedBackContentEvent.AddAsync(accountPublishFeedBack);
         }
     }
 }

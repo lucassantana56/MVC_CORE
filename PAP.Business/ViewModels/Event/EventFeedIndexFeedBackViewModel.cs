@@ -9,6 +9,6 @@ namespace PAP.Business.ViewModels.Event
         public int EventPublishId { get; set; }
         public string EventFeedBackText { get; set; }
         public string UserNick { get; set; }
-        public string UserPhoto { get; set; }
+        public string UserPhotoFeedBack { get; set; }
     }
 }

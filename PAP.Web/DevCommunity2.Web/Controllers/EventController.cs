@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PAP.Business;
 using PAP.Business.Managers;
 using PAP.Business.Persistence.Repositories;
 using PAP.Business.Repositories;
@@ -25,12 +19,12 @@ namespace DevCommunity2.Web.Controllers
         public EventController(IEventRepository eventRepo, BaseManager baseManager)
         {
             _eventRepo = (EventRepository)eventRepo;
-            _BaseManager = (BaseManager)baseManager;
+            _BaseManager = baseManager;
         }
 
 
         
-        [HttpGet]
+        [HttpPost]
         public ActionResult JoinOnEvent(int eventId)
         {
             Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
@@ -42,20 +36,41 @@ namespace DevCommunity2.Web.Controllers
 
             _eventRepo.JoinOnEvent(eventId, userId);
 
-            return Json(new { sucess = false });
+             return RedirectToAction(nameof(Index));
+        }
+
+
+        [HttpPost]
+        public ActionResult UnJoinOnEvent(int eventId)
+        {
+            Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
+
+            if (userId == null)
+            {
+                return Json(new { sucess = false });
+            }
+
+            _eventRepo.UnJoinEvent(eventId, userId);
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Event
         public ActionResult Index()
         {
-            return View(_eventRepo.GetAll());
+            Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
+            if (userId != null )
+            {
+                return View(_eventRepo.GetAll(userId));
+            }
+            return View();
         }
 
         // GET: Event/Details/5
         public ActionResult Details(int id)
         {
             try
-            {
+            {              
                 return View(_eventRepo.Get(id));
             }
             catch (Exception)

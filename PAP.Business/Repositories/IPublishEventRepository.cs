@@ -7,10 +7,10 @@ namespace PAP.Business.Repositories
 {
     public interface IPublishEventRepository
     {
-        void AddEventPublish(EventPostViewModel feedPost, Guid userId);
+        void AddEventPublish(EventPostViewModel FeedPost, Guid UserId,int EventId);
         void AddFeedBack(EventFeedIndexFeedBackViewModel FeedBack, Guid UserId);
 
-        IEnumerable<EventFeedIndexViewModel> GetEventPublishes();
-        IEnumerable<EventFeedIndexFeedBackViewModel> GetAccountPublishFeedBack(int AccountPublishId);
+        IEnumerable<EventFeedIndexViewModel> GetEventPublishes(int EventID);
+        IEnumerable<EventFeedIndexFeedBackViewModel> GetAccountPublishFeedBack(int AccountPublishId,int EventId);
     }
 }

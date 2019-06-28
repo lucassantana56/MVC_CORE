@@ -73,7 +73,7 @@ namespace DevCommunity2.Web.Controllers
                 _PublishAccountRepo.AddAccountPublish(FeedPost, userId);
                 _BaseManager.SaveChanges();
 
-                return Json(new { success = true, message = "sucess" });
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception)
             {
@@ -105,7 +105,7 @@ namespace DevCommunity2.Web.Controllers
                 
                 _PublishAccountRepo.AddFeedBack(fifvm, userId);
                 _BaseManager.SaveChanges();
-                return View();
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception)
             {

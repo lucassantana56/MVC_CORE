@@ -10,8 +10,8 @@ using PAP.Business.DbContext;
 namespace DevCommunity2.Web.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    [Migration("20190620195812_mg2")]
-    partial class mg2
+    [Migration("20190627181751_initial-migration")]
+    partial class initialmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -244,7 +244,9 @@ namespace DevCommunity2.Web.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<string>("PhotoUrl");
+                    b.Property<string>("PhotoUrl")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue("DefaultUserPhoto.png");
 
                     b.Property<string>("ProgrammingLanguages");
 
@@ -477,9 +479,9 @@ namespace DevCommunity2.Web.Migrations
 
                     b.Property<Guid>("AccountId");
 
-                    b.Property<DateTime>("DataPublish");
-
                     b.Property<int>("EventId");
+
+                    b.Property<DateTime>("PublishDate");
 
                     b.HasKey("PublishEventId");
 

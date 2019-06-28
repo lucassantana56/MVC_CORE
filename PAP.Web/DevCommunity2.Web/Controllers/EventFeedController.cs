@@ -21,6 +21,7 @@ namespace DevCommunity2.Web.Controllers
         private readonly PublishEventRepository _publishEventRepository;
         private readonly BaseManager _BaseManager;
         private readonly HostingEnvironment _hostingEnvironment;
+       
 
 
         public EventFeedController(IPublishEventRepository publishEventRepository, BaseManager baseManager, IHostingEnvironment hostingEnvironment)
@@ -30,11 +31,21 @@ namespace DevCommunity2.Web.Controllers
             _hostingEnvironment = (HostingEnvironment)hostingEnvironment;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int EventId)
         {
 
-            var result = _publishEventRepository.GetEventPublishes().ToList();
-            return View(result);
+            if (EventId == 0)
+            {
+                EventId = (int)TempData["EventId"]; 
+            }
+            if (EventId != 0)
+             {
+                var result = _publishEventRepository.GetEventPublishes(EventId).ToList();
+                TempData["EventId"] = EventId;
+               
+                return View(result);
+            }
+            return BadRequest();
         }
 
         // GET: Feed/Create
@@ -52,7 +63,7 @@ namespace DevCommunity2.Web.Controllers
             {
 
                 var uploadFolder = Path.Combine(
-                    _hostingEnvironment.WebRootPath, "Images", "AccountPublish");
+                    _hostingEnvironment.WebRootPath, "Images", "PublishEvent");
                 var uniqueFileName = Guid.NewGuid() + File.FileName;
 
                 var path = Path.Combine(uploadFolder, uniqueFileName);
@@ -62,7 +73,9 @@ namespace DevCommunity2.Web.Controllers
                 {
                     await File.CopyToAsync(stream);
                 }
+                FeedPost.EventId = int.Parse(TempData["EventId"].ToString());
 
+                TempData.Keep("EventId");
 
                 Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
 
@@ -70,10 +83,10 @@ namespace DevCommunity2.Web.Controllers
 
                 FeedPost.Path = uniqueFileName;
 
-                _publishEventRepository.AddEventPublish(FeedPost, userId);
+                _publishEventRepository.AddEventPublish(FeedPost, userId, FeedPost.EventId);
                 _BaseManager.SaveChanges();
 
-                return Json(new { success = true, message = "sucess" });
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception)
             {
@@ -96,8 +109,8 @@ namespace DevCommunity2.Web.Controllers
 
             var fifvm = new EventFeedIndexFeedBackViewModel()
             {
-               EventPublishId  = feedIndexViewModel.AccountPublishId,
-               EventFeedBackText  = feedIndexViewModel.FeedBackText
+                EventPublishId = feedIndexViewModel.AccountPublishId,
+                EventFeedBackText = feedIndexViewModel.FeedBackText
             };
 
             try
@@ -105,7 +118,7 @@ namespace DevCommunity2.Web.Controllers
 
                 _publishEventRepository.AddFeedBack(fifvm, userId);
                 _BaseManager.SaveChanges();
-                return View();
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception)
             {

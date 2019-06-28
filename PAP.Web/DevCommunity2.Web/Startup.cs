@@ -15,6 +15,7 @@ using PAP.Business.Repositories;
 using PAP.Business.Persistence.Repositories;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
+using Microsoft.AspNetCore.Authentication;
 
 namespace DevCommunity2.Web
 {
@@ -30,6 +31,19 @@ namespace DevCommunity2.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                // Make the session cookie essential
+                options.Cookie.IsEssential = true;
+            });
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -57,10 +71,19 @@ namespace DevCommunity2.Web
                 {
                     facebookOptions.AppId = "451240372332983";
                     facebookOptions.AppSecret = "c31cb56e88d62c3687388b228e028299";
-                })                 
+                })
+                .AddGitHub(options =>
+                {
+                    options.ClientId = "5bd671ecf886a17f4db6";
+                    options.ClientSecret = "403cbb7d3193ac6692fbb16976c187be5d8a4173";
+                })
                 .AddGoogle(googleOptions => {
                     googleOptions.ClientId = "256612312408-9qbfilnst4hejssitaqkdv2p8744oisv.apps.googleusercontent.com";
                     googleOptions.ClientSecret = "yPYXlDIPEbAwwwpERncZNjKD";
+                    googleOptions.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
+                    googleOptions.ClaimActions.MapJsonKey("urn:google:locale", "locale", "string");
+                    googleOptions.SaveTokens = true;
+
                 });
 
             services.Configure<IdentityOptions>(options =>
@@ -81,7 +104,7 @@ namespace DevCommunity2.Web
                 // User settings.
                 options.User.AllowedUserNameCharacters =
                         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = false;
+                options.User.RequireUniqueEmail = true;
             });
             services.ConfigureApplicationCookie(options =>
             {
@@ -94,7 +117,7 @@ namespace DevCommunity2.Web
                 //options.SlidingExpiration = true;
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
+               
             services.AddTransient<IEventRepository, EventRepository>();
             services.AddTransient<IAccountRepository, AccountRepository>();
             services.AddTransient<IPublishAccountRepository, PublishAccountRepository>();
@@ -124,7 +147,7 @@ namespace DevCommunity2.Web
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

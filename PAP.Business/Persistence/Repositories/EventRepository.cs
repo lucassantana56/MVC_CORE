@@ -34,20 +34,29 @@ namespace PAP.Business.Persistence.Repositories
             return @event;
         }
 
-        public IEnumerable<EventViewModel> GetAll()
+        public IEnumerable<EventViewModel> GetAll(Guid userId)
         {
-            var @event = _context.Event.Select(e => new EventViewModel()
-            {
-                DateCreated = e.DateCreated,
-                Description = e.Description,
-                EventId = e.EventId,
-                EventName = e.NameEvent,
-                EventDate = e.DateEvent,
-                TypeOfEvent = e.TypeOfEvent,
-                Location = e.Location
-            }).ToList();
-            return @event.ToList();
+          
+            var @event = (from EV in _context.Event 
+                         join AE in _context.AccountOnEvent 
+                         on EV.EventId equals AE.EventId
+                         select new EventViewModel()
+                         {      
+                             DateCreated = EV.DateCreated,
+                             Description = EV.Description,
+                             EventId = EV.EventId,
+                             EventName = EV.NameEvent,
+                             EventDate = EV.DateEvent,
+                             TypeOfEvent = EV.TypeOfEvent,
+                             Location = EV.Location,
+                             IsUserCreated = EV.CreatedByUserID == userId ,
+                             IsUserJoined = AE.AccountId == userId
+                         }).ToList();
+            
+            return @event;
         }
+
+
 
         public EventViewModel GetEventByUser(Guid userId)
         {
@@ -64,13 +73,11 @@ namespace PAP.Business.Persistence.Repositories
         }
 
 
-        public Boolean IsUserEventCreated(Guid UserId, int EventId)
+        public bool IsUserEventCreated(Guid UserId, Event Event)
         {
-            var @event = _context.Event.Find(EventId);
-
-            if (@event != null)
+            if (Event != null)
             {
-                if (@event.CreatedByUserID == UserId)
+                if (Event.CreatedByUserID == UserId)
                 {
                     return true;
                 }
@@ -90,6 +97,32 @@ namespace PAP.Business.Persistence.Repositories
 
         }
 
+
+        public Boolean IsUserOnEvent(Guid UserID , Event @event)
+        {
+                  
+            if (@event != null)
+            {
+                if (@event.AccountOnEvents.Count > 0)
+                {
+                    foreach (var item in @event.AccountOnEvents)
+                    {
+                        if (item.AccountId == UserID)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+              
+            }
+
+            return false;
+        }
+
         public void JoinOnEvent(int EventId, Guid UserId)
         {
             var accountOnEvent = new AccountOnEvent()
@@ -99,6 +132,16 @@ namespace PAP.Business.Persistence.Repositories
             };
 
             _context.AccountOnEvent.Add(accountOnEvent);
+        }
+
+        public void UnJoinEvent(int EventId, Guid UserId)
+        {
+            var accountOnEvent = (from AE in _context.AccountOnEvent
+                                  where AE.EventId == EventId && AE.AccountId == UserId
+                                  select AE
+                                  ).First();                                
+
+            _context.AccountOnEvent.Remove(accountOnEvent);
         }
 
         public void Add(EventViewModel entity, Guid userId)

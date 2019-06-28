@@ -15,21 +15,38 @@
     <div class="card">
         <div class="card text-center">
             <div class="card-header">
-                <a asp-controller="EventFeed" asp-action="Index">@item.EventName</a>
-                @using (Html.BeginForm("JoinOnEvent", "Event", FormMethod.Post))
+                @Html.ActionLink(@item.EventName, "Index","EventFeed", new { EventId = item.EventId })
+                @if (!item.IsUserJoined)
                 {
-                    <button type="submit" name="btnJoinEvent" class="btn btn-primary btn-sm" style="float:right;">JOIN</button>
+                    @using (Html.BeginForm("JoinOnEvent", "Event", FormMethod.Post))
+                    {
+                        <input type="hidden" value="@item.EventId " name="EventId" />
+                        <button type="submit" name="btnJoinEvent" class="btn btn-primary btn-sm" style="float:right;">JOIN</button>
+                    }
+                }
+                else
+                {
+                    @using (Html.BeginForm("UnJoinOnEvent", "Event", FormMethod.Post))
+                    {
+                        <input type="hidden" value="@item.EventId " name="EventId" />
+                        <button type="submit" name="btnJoinEvent" class="btn btn-primary btn-sm" style="float:right;">UnJoin</button>
+                    }
                 }
             </div>
             <div class="card-body">
                 <p class="card-text">@item.TypeOfEvent</p>
                 <p class="card-text">@item.Description</p>
-                @Html.ActionLink("Edit", "Edit", new { @class = "btn btn-primary", id = item.EventId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.EventId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.EventId })
+
+                @if (item.IsUserCreated)
+                {
+                    @Html.ActionLink("Edit", "Edit", new { @class = "btn btn-primary", id = item.EventId })
+                    @Html.ActionLink("Details", "Details", new { id = item.EventId })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.EventId })
+                }
+
             </div>
             <div class="card-footer text-muted">
-                Created on : @item.DateCreated
+                Created on : @item.DateCreated.ToShortDateString();
             </div>
         </div>
     </div>

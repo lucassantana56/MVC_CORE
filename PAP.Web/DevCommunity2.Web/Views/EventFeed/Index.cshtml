@@ -1,22 +1,21 @@
-﻿@model List<FeedIndexViewModel>
+﻿@model List<EventFeedIndexViewModel>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/LayoutAuth.cshtml";
 }
 
 @{
-    FeedPostViewModel fpvm = new FeedPostViewModel();
+    EventPostViewModel fepvm = new EventPostViewModel();
 }
 <br />
-<partial name="_FeedCreatePost" model="fpvm" />
+<partial name="_FeedEventCreatePost" model="fepvm" />
 <br />
 <br />
 @if (Model != null)
 {
     @foreach (var item in Model)
     {
-        <partial name="_FeedIndexViewModel" model="item" />
-        <partial name="_FeedAccountPublishFeedBackIndex" />
+        <partial name="_FeedEventIndexViewModel" model="item" />     
     }
 }
 

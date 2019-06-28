@@ -38,6 +38,11 @@
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
 
+            <div class="md-form">
+                <input type="password" id="materialRegisterFormPassword" asp-for="Input.ConfirmPassword" class="form-control" aria-describedby="materialRegisterFormPasswordHelpBlock" placeholder="Confirm Password">
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+
             <div class="file-field">
                 <div class="mb-4">
                     <img src="~/Images/UserPhotos/DefaultUserPhoto.png"
@@ -76,11 +81,6 @@
 
 
         }
-
-
-
-
-
     </div>
 
 </div>

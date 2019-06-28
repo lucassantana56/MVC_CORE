@@ -2,14 +2,14 @@
 <br />
 <li class="list-group-item" style="padding-top:2px; padding-left:5px;">
     <div class="row">
-        <div class="col-md-1">
+        <div class="col-sm-6  mt-3  col-md-1">
             <img src="~/Images/UserPhotos/@Model.UserPublishPhoto" class="rounded-circle avatar z-depth-1-half mr-3">
         </div>
-        <div class="col-md-11">
-            <p>
-                <a class="float-left"><strong> @Model.UserNick</strong></a>
+        <div class="col-sm-6 col-md-11  mt-3">
+            <p style="position:relative " class="float-left">
+                <strong> @Model.UserNick</strong>
             </p>
-            <div class="clearfix"></div>
+           <div class="clearfix"></div>
             <p>@Model.TextOnPublish</p>
             <img src="~/Images/AccountPublish/@Model.PhotoPath" class="img-fluid rounded mx-auto d-block" />
         </div>
@@ -38,10 +38,10 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-1">
-                    <img id="feedbackindexuserphoto" src="~/Images/UserPhotos/@item.UserPhoto" class="d-flex rounded-circle avatar z-depth-1-half mr-3" />
+                <div class="col-sm-1 col-md-1 ">
+                    <img id="feedbackindexuserphoto" src="~/Images/UserPhotos/@item.UserPhotoFeedBack" class="d-flex rounded-circle avatar z-depth-1-half mr-3" />
                 </div>
-                <div class="col-md-11">
+                <div class="col-sm-11 col-md-11">
                     <p class="float-left" id="feedbackindexusername">
                         <strong>@item.UserNick</strong>
                     </p>

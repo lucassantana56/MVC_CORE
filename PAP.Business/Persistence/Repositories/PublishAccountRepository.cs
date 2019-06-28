@@ -69,16 +69,15 @@ namespace PAP.Business.Persistence.Repositories
 
         public IEnumerable<FeedIndexFeedBackViewModel> GetAccountPublishFeedBack(int AccountPublishId)
         {
-            var FeedAccountPublishFeedBack = from AP in _context.AccountPublish
-                                             join AC in _context.Users on
-                                             AP.AccountId equals AC.Id
-                                             join FBCA in _context.FeedBackContentAccount
-                                             on AP.AccountId equals FBCA.AccountId                                             
+            var FeedAccountPublishFeedBack = from FBCA in _context.FeedBackContentAccount 
+                                             join AC in _context.Users
+                                             on FBCA.AccountId equals AC.Id
+                                             where FBCA.AccountPublishId == AccountPublishId
                                              select new FeedIndexFeedBackViewModel()
                                              {
                                                  FeedBackText = FBCA.Description,
                                                  UserNick = AC.NickName,
-                                                 UserPhoto = AC.PhotoUrl
+                                                 UserPhotoFeedBack = AC.PhotoUrl
                                              };
 
             return FeedAccountPublishFeedBack;
