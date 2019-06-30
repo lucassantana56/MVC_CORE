@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -19,15 +24,18 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly ILogger<ExternalLoginModel> _logger;
+        private readonly HostingEnvironment _hostingEnvironment;
 
         public ExternalLoginModel(
             SignInManager<User> signInManager,
             UserManager<User> userManager,
-            ILogger<ExternalLoginModel> logger)
+            ILogger<ExternalLoginModel> logger,
+            IHostingEnvironment hostingEnvironment)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
+            _hostingEnvironment = (HostingEnvironment)hostingEnvironment;
         }
 
         [BindProperty]
@@ -45,6 +53,12 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            [Required]
+            public string UserName { get; set; }
+
+           
+            public IFormFile PhotoUrl { get; set; }
         }
 
         public IActionResult OnGetAsync()
@@ -66,7 +80,7 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account
             if (remoteError != null)
             {
                 ErrorMessage = $"Error from external provider: {remoteError}";
-                return RedirectToPage("./Login", new {ReturnUrl = returnUrl });
+                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
@@ -76,7 +90,7 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account
             }
 
             // Sign in the user with this external login provider if the user already has a login.
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor : true);
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (result.Succeeded)
             {
                 _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
@@ -95,7 +109,8 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account
                 {
                     Input = new InputModel
                     {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                        Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                        UserName = info.Principal.FindFirstValue(ClaimTypes.GivenName),
                     };
                 }
                 return Page();
@@ -113,15 +128,39 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
 
+
+
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = Input.Email, Email = Input.Email };
+                var user = new User {
+                    UserName = Input.UserName,
+                    Email = Input.Email,
+                    NickName = Input.UserName,
+                    PhotoUrl = await UniquePhotoNameAsync(Input.PhotoUrl)
+                };
+
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
+                        if (info.Principal.HasClaim(c => c.Type == ClaimTypes.GivenName))
+                        {
+                            await _userManager.AddClaimAsync(user,
+                                info.Principal.FindFirst(ClaimTypes.GivenName));
+                        }
+
+                        if (info.Principal.HasClaim(c => c.Type == "urn:google:picture"))
+                        {
+                            await _userManager.AddClaimAsync(user,
+                                info.Principal.FindFirst("urn:google:picture"));
+                        }
+
+                        var props = new AuthenticationProperties();
+                        props.StoreTokens(info.AuthenticationTokens);
+                        props.IsPersistent = true;
+
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
                         return LocalRedirect(returnUrl);
@@ -136,6 +175,31 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account
             LoginProvider = info.LoginProvider;
             ReturnUrl = returnUrl;
             return Page();
+        }
+        async Task<string> UniquePhotoNameAsync(IFormFile File)
+        {
+            try
+            {
+                var uploadFolder = Path.Combine(
+                      _hostingEnvironment.WebRootPath, "Images", "UserPhotos");
+                var uniqueFileName = Guid.NewGuid() + File.FileName;
+
+                var path = Path.Combine(uploadFolder, uniqueFileName);
+
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await File.CopyToAsync(stream);
+                }
+                return uniqueFileName;
+            }
+            catch (Exception)
+            {
+                return "DefaultUserPhoto.png";
+                throw;
+            }
+           
+            
         }
     }
 }

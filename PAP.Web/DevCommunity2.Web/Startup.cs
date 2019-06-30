@@ -16,6 +16,9 @@ using PAP.Business.Persistence.Repositories;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Authentication;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DevCommunity2.Web
 {
@@ -81,8 +84,21 @@ namespace DevCommunity2.Web
                     googleOptions.ClientId = "256612312408-9qbfilnst4hejssitaqkdv2p8744oisv.apps.googleusercontent.com";
                     googleOptions.ClientSecret = "yPYXlDIPEbAwwwpERncZNjKD";
                     googleOptions.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
-                    googleOptions.ClaimActions.MapJsonKey("urn:google:locale", "locale", "string");
                     googleOptions.SaveTokens = true;
+
+                    googleOptions.Events.OnCreatingTicket = ctx =>
+                    {
+                        List<AuthenticationToken> tokens = ctx.Properties.GetTokens().ToList();
+
+                        tokens.Add(new AuthenticationToken()
+                        {
+                            Name = "TicketCreated",
+                            Value = DateTime.UtcNow.ToString()
+                        });
+
+                        ctx.Properties.StoreTokens(tokens);
+                        return Task.CompletedTask;
+                    };
 
                 });
 

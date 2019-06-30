@@ -35,6 +35,7 @@ namespace DevCommunity2.Web.Controllers
             }
 
             _eventRepo.JoinOnEvent(eventId, userId);
+            _BaseManager.SaveChanges();
 
              return RedirectToAction(nameof(Index));
         }
@@ -51,6 +52,7 @@ namespace DevCommunity2.Web.Controllers
             }
 
             _eventRepo.UnJoinEvent(eventId, userId);
+            _BaseManager.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
@@ -96,7 +98,7 @@ namespace DevCommunity2.Web.Controllers
             {
                 //  string userid = User.
                 //Guid.TryParse(userid, out Guid usertst);
-                // TODO: Add insert logic here           
+                // TODO: Add insert logic here     
                 Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
                 _eventRepo.Add(@event, userId);
                 _BaseManager.SaveChanges();
