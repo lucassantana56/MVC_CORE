@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PAP.DataBase;
+﻿using PAP.DataBase;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PAP.Business.ViewModels
 {
     public class EventViewModel
     {
         public Guid UserId { get; set; }
-        [TempData]
         public int EventId { get; set; }
         public string  EventName { get; set; }
         public DateTime EventDate { get; set; }
