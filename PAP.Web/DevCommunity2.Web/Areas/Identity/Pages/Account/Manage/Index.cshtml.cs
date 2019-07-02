@@ -115,7 +115,7 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
             }
 
             var uploadFolder = Path.Combine(
-                    _hostingEnvironment.WebRootPath, "Images", "AccountPublish");
+                    _hostingEnvironment.WebRootPath, "Images", "UserPhotos");
             var uniqueFileName = Guid.NewGuid() + Input.PhotoUrl.FileName;
 
             var path = Path.Combine(uploadFolder, uniqueFileName);
@@ -130,7 +130,7 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
 
             var account = new AccountDataViewModel()
             {             
-                FileName = uniqueFileName,
+                PhotoUniqueName = uniqueFileName,
                 UserId = userId2
             };
 
