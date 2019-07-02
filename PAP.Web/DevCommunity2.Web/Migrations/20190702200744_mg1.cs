@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DevCommunity2.Web.Migrations
 {
-    public partial class initialmigration : Migration
+    public partial class mg1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,13 +41,8 @@ namespace DevCommunity2.Web.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    FistName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
                     NickName = table.Column<string>(nullable: true),
-                    PhotoUrl = table.Column<string>(nullable: true, defaultValue: "DefaultUserPhoto.png"),
-                    Stars = table.Column<int>(nullable: false, defaultValue: 3),
-                    ProgrammingLanguages = table.Column<string>(nullable: true),
-                    Country = table.Column<string>(nullable: true)
+                    PhotoUrl = table.Column<string>(nullable: true, defaultValue: "DefaultUserPhoto.png")
                 },
                 constraints: table =>
                 {

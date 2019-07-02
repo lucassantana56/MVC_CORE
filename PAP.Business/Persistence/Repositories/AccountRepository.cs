@@ -19,9 +19,7 @@ namespace PAP.Business.Persistence.Repositories
         public void UpdateData(AccountDataViewModel user)
         {
             var User = _context.Users.Find(user.UserId);
-            User.PhotoUrl = user.PhotoUniqueName;
-            User.Country = user.Country;
-            User.ProgrammingLanguages = user.ProgramminglLanguages;
+            User.PhotoUrl = user.PhotoUniqueName;     
             
 
         }

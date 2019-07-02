@@ -10,8 +10,8 @@ using PAP.Business.DbContext;
 namespace DevCommunity2.Web.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    [Migration("20190627181751_initial-migration")]
-    partial class initialmigration
+    [Migration("20190702200744_mg1")]
+    partial class mg1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -215,16 +215,10 @@ namespace DevCommunity2.Web.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<string>("Country");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
-
-                    b.Property<string>("FistName");
-
-                    b.Property<string>("LastName");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -248,13 +242,7 @@ namespace DevCommunity2.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue("DefaultUserPhoto.png");
 
-                    b.Property<string>("ProgrammingLanguages");
-
                     b.Property<string>("SecurityStamp");
-
-                    b.Property<int>("Stars")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(3);
 
                     b.Property<bool>("TwoFactorEnabled");
 

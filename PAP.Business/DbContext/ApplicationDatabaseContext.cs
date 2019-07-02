@@ -45,11 +45,7 @@ namespace PAP.Business.DbContext
             modelBuilder.Entity<PublishEvent>()
                 .HasOne(PE => PE.ContentPublishEvent)
                 .WithOne(I => I.PublishEvent)
-                .HasForeignKey<ContentPublishEvent>(C => C.PublishEventId);
-
-            modelBuilder.Entity<User>()
-                .Property(A => A.Stars)
-                .HasDefaultValue(3);
+                .HasForeignKey<ContentPublishEvent>(C => C.PublishEventId);       
 
             modelBuilder.Entity<Event>()
                 .Property(E => E.IsEnabled)

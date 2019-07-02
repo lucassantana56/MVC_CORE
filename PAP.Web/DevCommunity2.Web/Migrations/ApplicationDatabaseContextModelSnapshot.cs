@@ -213,16 +213,10 @@ namespace DevCommunity2.Web.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<string>("Country");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
-
-                    b.Property<string>("FistName");
-
-                    b.Property<string>("LastName");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -246,13 +240,7 @@ namespace DevCommunity2.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue("DefaultUserPhoto.png");
 
-                    b.Property<string>("ProgrammingLanguages");
-
                     b.Property<string>("SecurityStamp");
-
-                    b.Property<int>("Stars")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(3);
 
                     b.Property<bool>("TwoFactorEnabled");
 

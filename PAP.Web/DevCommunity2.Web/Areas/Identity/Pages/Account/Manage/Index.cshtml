@@ -26,12 +26,7 @@
                     <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
                 }
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.NickName "></label>
-                <input asp-for="Input.NickName" class="form-control" />
-                <span asp-validation-for="Input.NickName" class="text-danger"></span>
-            </div>
+            </div>         
             <div class="form-group">
                 <label asp-for="Input.PhotoUrl"></label>
                 <input type="file" asp-for="Input.PhotoUrl" class="btn btn-primary btn-sm float-left" />

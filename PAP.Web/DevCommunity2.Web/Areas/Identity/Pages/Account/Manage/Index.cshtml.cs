@@ -60,10 +60,7 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
 
             [EmailAddress]
             public string Email { get; set; }
-
-            public string NickName { get; set; }
-
-
+  
             [Display(Name = "Photo")]
             public IFormFile PhotoUrl { get; set; }
 
@@ -132,8 +129,7 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
             Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId2);
 
             var account = new AccountDataViewModel()
-            {
-                UserName = Input.NickName,
+            {             
                 FileName = uniqueFileName,
                 UserId = userId2
             };
