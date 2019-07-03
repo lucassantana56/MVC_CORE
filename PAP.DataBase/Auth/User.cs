@@ -6,16 +6,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace PAP.DataBase.Auth
 {
     public class User : IdentityUser<Guid>
-    {
-     
-        public string FistName { get; set; }
-        public string LastName { get; set; }
+    {      
         public string NickName { get; set; }
         public string  PhotoUrl { get; set; }
-        public int Stars { get; set; }
-        public string ProgrammingLanguages { get; set; }
-        public string Country { get; set; }     
-
+     
      
         [InverseProperty(nameof(AccountOnEvent.Account))]
         public virtual ICollection<AccountOnEvent> AccountOnEvents { get; set; }

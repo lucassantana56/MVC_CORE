@@ -60,10 +60,7 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
 
             [EmailAddress]
             public string Email { get; set; }
-
-            public string NickName { get; set; }
-
-
+  
             [Display(Name = "Photo")]
             public IFormFile PhotoUrl { get; set; }
 
@@ -118,7 +115,7 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
             }
 
             var uploadFolder = Path.Combine(
-                    _hostingEnvironment.WebRootPath, "Images", "AccountPublish");
+                    _hostingEnvironment.WebRootPath, "Images", "UserPhotos");
             var uniqueFileName = Guid.NewGuid() + Input.PhotoUrl.FileName;
 
             var path = Path.Combine(uploadFolder, uniqueFileName);
@@ -132,9 +129,8 @@ namespace DevCommunity2.Web.Areas.Identity.Pages.Account.Manage
             Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId2);
 
             var account = new AccountDataViewModel()
-            {
-                UserName = Input.NickName,
-                FileName = uniqueFileName,
+            {             
+                PhotoUniqueName = uniqueFileName,
                 UserId = userId2
             };
 

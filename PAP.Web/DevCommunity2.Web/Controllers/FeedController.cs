@@ -50,26 +50,25 @@ namespace DevCommunity2.Web.Controllers
         {
             try
             {
-
-                var uploadFolder = Path.Combine(
-                    _hostingEnvironment.WebRootPath, "Images", "AccountPublish");
-                var uniqueFileName = Guid.NewGuid() + File.FileName;
-
-                var path = Path.Combine(uploadFolder, uniqueFileName);
-
-
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    await File.CopyToAsync(stream);
-                }
-
-
                 Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
+                if (File != null)
+                {
+                    var uploadFolder = Path.Combine(
+                        _hostingEnvironment.WebRootPath, "Images", "AccountPublish");
+                    var uniqueFileName = Guid.NewGuid() + File.FileName;
 
-                string pic = System.IO.Path.GetFileName(File.FileName);
+                    var path = Path.Combine(uploadFolder, uniqueFileName);
 
-                FeedPost.Path = uniqueFileName;
 
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await File.CopyToAsync(stream);
+                    }
+               
+                    string pic = System.IO.Path.GetFileName(File.FileName);
+
+                    FeedPost.Path = uniqueFileName;
+                }
                 _PublishAccountRepo.AddAccountPublish(FeedPost, userId);
                 _BaseManager.SaveChanges();
 
@@ -112,51 +111,6 @@ namespace DevCommunity2.Web.Controllers
                 return BadRequest();
                 throw;
             }
-        }
-        // GET: Feed/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Feed/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Feed/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Feed/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        }           
     }
 }

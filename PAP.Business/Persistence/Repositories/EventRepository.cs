@@ -36,23 +36,23 @@ namespace PAP.Business.Persistence.Repositories
 
         public IEnumerable<EventViewModel> GetAll(Guid userId)
         {
+
+            var @event = (from EV in _context.Event
+                          join AE in _context.AccountOnEvent
+                          on EV.EventId equals AE.EventId
+                          select new EventViewModel()
+                          {
+                              DateCreated = EV.DateCreated,
+                              Description = EV.Description,
+                              EventId = EV.EventId,
+                              EventName = EV.NameEvent,
+                              EventDate = EV.DateEvent,
+                              TypeOfEvent = EV.TypeOfEvent,
+                              Location = EV.Location,
+                              IsUserCreated = EV.CreatedByUserID == userId,
+                              IsUserJoined = AE.AccountId == userId
+                          }).ToList();
           
-            var @event = (from EV in _context.Event 
-                         join AE in _context.AccountOnEvent 
-                         on EV.EventId equals AE.EventId
-                         select new EventViewModel()
-                         {      
-                             DateCreated = EV.DateCreated,
-                             Description = EV.Description,
-                             EventId = EV.EventId,
-                             EventName = EV.NameEvent,
-                             EventDate = EV.DateEvent,
-                             TypeOfEvent = EV.TypeOfEvent,
-                             Location = EV.Location,
-                             IsUserCreated = EV.CreatedByUserID == userId ,
-                             IsUserJoined = AE.AccountId == userId
-                         }).ToList();
-            
             return @event;
         }
 

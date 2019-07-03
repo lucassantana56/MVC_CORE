@@ -11,8 +11,5 @@ namespace PAP.Business.ViewModels.Account
         public string PhotoUniqueName { get; set; }
         public string FileName { get; set; }
         public string ContentType { get; set; }
-        public string Country { get; set; }
-        public string ProgramminglLanguages { get; set; }
-        public int Stars { get; set; }
     }
 }

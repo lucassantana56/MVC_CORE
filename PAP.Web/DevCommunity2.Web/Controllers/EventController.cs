@@ -66,21 +66,7 @@ namespace DevCommunity2.Web.Controllers
                 return View(_eventRepo.GetAll(userId));
             }
             return View();
-        }
-
-        // GET: Event/Details/5
-        public ActionResult Details(int id)
-        {
-            try
-            {              
-                return View(_eventRepo.Get(id));
-            }
-            catch (Exception)
-            {
-                return View();
-                throw;
-            }
-        }
+        }    
 
         // GET: Event/Create
         
@@ -94,8 +80,7 @@ namespace DevCommunity2.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(EventViewModel @event)
         {
-            try
-            {
+           
                 //  string userid = User.
                 //Guid.TryParse(userid, out Guid usertst);
                 // TODO: Add insert logic here     
@@ -103,11 +88,8 @@ namespace DevCommunity2.Web.Controllers
                 _eventRepo.Add(@event, userId);
                 _BaseManager.SaveChanges();
                 return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            
+           
         }
 
         // GET: Event/Edit/5

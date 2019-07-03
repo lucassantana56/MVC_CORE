@@ -16,23 +16,7 @@
         <div class="card text-center">
             <div class="card-header">
                 <p class="card-title">
-                    @Html.ActionLink(@item.EventName, "Index", "EventFeed", new { EventId = item.EventId })
-                    @if (!item.IsUserJoined)
-                    {
-                        @using (Html.BeginForm("JoinOnEvent", "Event", FormMethod.Post))
-                        {
-                            <input type="hidden" value="@item.EventId " name="EventId" />
-                            <button type="submit" name="btnJoinEvent" class="btn btn-primary btn-sm" style="float:right;">JOIN</button>
-                        }
-                    }
-                    else
-                    {
-                        @using (Html.BeginForm("UnJoinOnEvent", "Event", FormMethod.Post))
-                        {
-                            <input type="hidden" value="@item.EventId " name="EventId" />
-                            <button type="submit" name="btnJoinEvent" class="btn btn-primary btn-sm" style="float:right;">UnJoin</button>
-                        }
-                    }
+                    @Html.ActionLink(@item.EventName, "Index", "EventFeed", new { EventId = item.EventId })                 
                 </p>
             </div>
             <div class="card-body">

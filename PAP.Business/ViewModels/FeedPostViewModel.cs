@@ -9,6 +9,7 @@ namespace PAP.Business.ViewModels
 {
     public class FeedPostViewModel
     {
+        [Required]
         public string TextOnPublish { get; set; }
         public string Path { get; set; }
         public byte[] PhotoBytes { get; set; }
