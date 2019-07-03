@@ -61,28 +61,29 @@ namespace DevCommunity2.Web.Controllers
         {
             try
             {
+                Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
 
-                var uploadFolder = Path.Combine(
-                    _hostingEnvironment.WebRootPath, "Images", "PublishEvent");
-                var uniqueFileName = Guid.NewGuid() + File.FileName;
-
-                var path = Path.Combine(uploadFolder, uniqueFileName);
-
-
-                using (var stream = new FileStream(path, FileMode.Create))
+                if (File != null)
                 {
-                    await File.CopyToAsync(stream);
+
+                    var uploadFolder = Path.Combine(
+                        _hostingEnvironment.WebRootPath, "Images", "PublishEvent");
+                    var uniqueFileName = Guid.NewGuid() + File.FileName;
+
+                    var path = Path.Combine(uploadFolder, uniqueFileName);
+
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await File.CopyToAsync(stream);
+                    }
+                    string pic = System.IO.Path.GetFileName(File.FileName);
+
+                    FeedPost.Path = uniqueFileName;
                 }
                 FeedPost.EventId = int.Parse(TempData["EventId"].ToString());
 
                 TempData.Keep("EventId");
-
-                Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId);
-
-                string pic = System.IO.Path.GetFileName(File.FileName);
-
-                FeedPost.Path = uniqueFileName;
-
                 _publishEventRepository.AddEventPublish(FeedPost, userId, FeedPost.EventId);
                 _BaseManager.SaveChanges();
 
